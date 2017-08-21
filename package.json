@@ -1,6 +1,6 @@
 {
   "name": "react-eflow",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "eflow manage react data ",
   "main": "lib/eflow.js",
   "scripts": {
@@ -27,5 +27,9 @@
     "http-server": "^0.8.5",
     "webpack": "^1.12.13",
     "webpack-dev-server": "^1.14.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maweimaweima/react-eflow.git"
   }
 }

@@ -1,5 +1,5 @@
 # react-eflow
-##### eflow 通过使用默认配置策略来管理数据流，实现快捷易用。
+##### eflow 通过使用默认配置策略来管理数据流，所以使用起来高效简单。
 
 1. 使用Store管理数据，Store的方法有2个作用，既可以用于处理相关业务数据，又可通过该方法的dispatch方法发布数据，数据存在Store的缓存中，该属性与该方法同名。
 2. 通过wrapComponent包装用户组件 `wrapComponent(SomeComponent, [xxxStore.doSomething])`
@@ -10,7 +10,8 @@
 ```
 npm install react-eflow -save
 ```
-### 简单使用介绍
+
+### 使用介绍
 
 ##### 1. 新建Store子类，并实例化
 
@@ -80,6 +81,9 @@ class SomeHeader extends Component {
 //在render内部通过props即可获取request值
 export default wrapComponent(SomeHeader, [someStore.add]);
 ```
+###其他文档
+#### [Store使用介绍](./docs/Store.md)
+#### [wrapComponent使用介绍](./docs/wrapComponent.md)
 
 
 
