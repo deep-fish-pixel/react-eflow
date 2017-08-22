@@ -64,7 +64,7 @@ class SomeHeader extends Component {
     super(props);
     //调用someStore.add
     someStore.add();
-    //调用完成后，state值为： {add:{request: true}}
+    //调用完成后，someStore的state值为： {add:{request: true}}
   }
   render(){
     {/*在this.props.add中则会有{request: true} 对象*/}
