@@ -70,5 +70,14 @@ export default wrapComponent(SomeComponent, [someStore.doSomething], function (s
 });
 ```
 
+#### wrapComponent组件后,通过 innerRef获取内部组件,使用方式与ref相同
+
+```
+<SomeComponent ref={function(wrap) {
+    console.log(wrap);
+  }} innerRef={function(inner) {
+    console.log(inner);
+  }}/>
+```
 
 

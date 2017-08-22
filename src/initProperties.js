@@ -43,6 +43,7 @@ export default function initProperties(obj, id) {
           id
         ),
         dispatch: obj.bind(method),
+        data: obj.data.bind(obj, method),
         ref: obj,
         flows: {},
         //指定该方法跟随flower方法同步更新

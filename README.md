@@ -22,10 +22,10 @@ class SomeStore extends Store{
     super(options);
   }
 
-  add(){
-    //通过this.add获取该方法的dispatch
-    var dispatch = this.add.dispatch;
-    //发布相关数据，发布后在该对象内部state的add属性包含发布值
+  doSomeThing(){
+    //通过this.doSomeThing获取该方法的dispatch
+    var dispatch = this.doSomeThing.dispatch;
+    //发布相关数据，发布后在该对象内部state的doSomeThing属性包含发布值
     dispatch({request: true});
   }
 //实例化
@@ -38,19 +38,19 @@ export default new SomeStore();
 import {wrapComponent} from 'react-eflow'
 import someStore from '../store/SomeStore'
 
-class SomeHeader extends Component {
+class SomeComponent extends Component {
   constructor(props){
     super(props);
-    //调用someStore.add
-    someStore.add();
-    //调用完成后，state值为： {add:{request: true}}
+    //调用someStore.doSomeThing
+    someStore.doSomeThing();
+    //调用完成后，someStore内部state值： {doSomeThing:{request: true}}
   }
   render(){
     return <div></div>;
   }
 }
 
-export default SomeHeader;
+export default SomeComponent;
 ```
 
 ##### 3. 同步Store数据到组件
@@ -59,27 +59,27 @@ export default SomeHeader;
 import {wrapComponent} from 'react-eflow'
 import someStore from '../store/SomeStore'
 
-class SomeHeader extends Component {
+class SomeComponent extends Component {
   constructor(props){
     super(props);
-    //调用someStore.add
-    someStore.add();
-    //调用完成后，someStore的state值为： {add:{request: true}}
+    //调用someStore.doSomeThing
+    someStore.doSomeThing();
+    //调用完成后，state值为： {doSomeThing:{request: true}}
   }
   render(){
-    {/*在this.props.add中则会有{request: true} 对象*/}
-    let request = this.props.add.request;
+    {/*在this.props.doSomeThing中则会有{request: true} 对象*/}
+    let request = this.props.doSomeThing.request;
     return (
       <div>
-      {request}
+        request: {request ? 'true' : 'false'}
       </div>
     );
   }
 }
-//需要先包装SomeHeader组件，再绑定someStore.add方法，
-//使someStore.add.dispatch触发后自动更新数据到SomeHeader组件的props.add属性上
+//需要先包装SomeComponent组件，再绑定someStore.doSomeThing方法，
+//使someStore.doSomeThing.dispatch触发后自动更新数据到SomeHeader组件的props.doSomeThing属性上
 //在render内部通过props即可获取request值
-export default wrapComponent(SomeHeader, [someStore.add]);
+export default wrapComponent(SomeComponent, [someStore.doSomeThing]);
 ```
 ###其他文档
 #### [Store使用介绍](./docs/Store.md)

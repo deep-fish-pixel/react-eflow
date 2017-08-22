@@ -123,9 +123,22 @@ let wrapComponent = function(_Component, updaters, customPropsMapping){
       }
     }
 
+    getProps(){
+      var curProps = {}, props = this.props;
+      for(var propName in props){
+        if(propName === 'innerRef' && props.innerRef){
+          curProps.ref = props.innerRef;
+        }
+        else{
+          curProps[propName] = props[propName];
+        }
+      }
+      return curProps;
+    }
+
     render(){
       let state = this.state;
-      return <_Component {...state} {...this.props}/>
+      return <_Component {...state} {...this.getProps()}/>
     }
 
 

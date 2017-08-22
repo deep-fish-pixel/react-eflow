@@ -25,14 +25,14 @@ class TodoStore extends Store{
 
   todos(todo){
     let dispatch = this.todos.dispatch,
-        todos = this.data(this.todos);
+        todos = this.todos.data();
 
     todos.push(todo);
     dispatch(todos);
   }
 
   editTodo(_todo){
-    let todos = this.data(this.todos);
+    let todos = this.todos.data();
 
     todos.some(function(todo){
       if(_todo.id == todo.id){
@@ -45,7 +45,7 @@ class TodoStore extends Store{
 
   toggleTodo(id){
     let dispatch = this.todos.dispatch,
-      todos = this.data(this.todos);
+      todos = this.todos.data();
 
     todos.some(function(todo, index){
       if(id == todo.id){
@@ -59,7 +59,7 @@ class TodoStore extends Store{
 
   toggleTodos(){
     let dispatch = this.todos.dispatch,
-      todos = this.data(this.todos);
+      todos = this.todos.data();
 
     todos = todos.map(function(todo){
       return {...todo, completed: !todo.completed};
@@ -69,7 +69,7 @@ class TodoStore extends Store{
 
   deleteTodo(id){
     let dispatch = this.todos.dispatch,
-      todos = this.data(this.todos);
+      todos = this.todos.data();
 
     todos = todos.filter(function(todo){
       return todo.id !== id;

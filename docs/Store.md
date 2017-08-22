@@ -21,10 +21,10 @@ new TodoStore()
 new TodoStore({id: 'xxx'})
 ```
 
-#### 只能通过this.data获取相关数据, 参数类型是store对应的方法，严禁使用this.state获取store数据
+#### 只能通过this.method.data()获取相关数据, 参数类型是store对应的方法，尽量不要使用store.state或store.getState()获取数据
 
 ```
-todos = this.data(this.todos)
+todos = this.todos.data();
 ```
 
 #### 需要保存数据并把该变化通知给相关组件，使用该方法的dispatch进行发布
@@ -33,17 +33,17 @@ todos = this.data(this.todos)
 this.todos.dispatch(todos);
 ```
 
-#### 需要保存数据但不需要发布出去时，使用this.data保存
+#### 需要保存数据但不需要发布出去时，使用this.method.data保存,必须传参数值保存有效
 
 ```
-this.data(this.todos， todos)
+this.todos.data(todos)
 ```
 
 #### 在Store中一个方法可调用另一个方法，但数据更新通知发出最终看哪些方法调用了dispatch
 
 ```
 editTodo(_todo){
-    let todos = this.data(this.todos);
+    let todos = this.todos.data();
 
     todos.some(function(todo){
       if(_todo.id == todo.id){
