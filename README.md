@@ -8,7 +8,7 @@
 ### 安装
 
 ```
-npm install react-eflow -save
+npm install --save react-eflow 
 ```
 
 ### 使用介绍
