@@ -33,7 +33,7 @@ todos = this.todos.data();
 this.todos.dispatch(todos);
 ```
 
-#### 需要保存数据但不需要发布出去时，使用this.method.data保存,必须传参数值保存有效
+#### 需要保存数据但不需要发布出去时，使用this.method.data保存,此方法必须传参,否则当成数据获取。
 
 ```
 this.todos.data(todos)
