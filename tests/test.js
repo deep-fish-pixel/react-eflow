@@ -1,5 +1,23 @@
-const sum = require('./sum');
+import Store from '../src/Store'
 
-test('adds 1 + 2 to equal 3', () => {
-  expect(sum(1, 2)).toBe(3);
+class TestStore extends Store{
+  constructor(options){
+    super(options);
+  }
+
+  testObj(){
+    let dispatch = this.testObj.dispatch;
+    let testData = this.testObj.data;
+  }
+}
+
+let testStore = new TestStore();
+
+describe('first group test', () => {
+  test('testStore.testObj.dispatch exist', () => {
+    expect(!testStore.testObj.dispatch).toBeFalsy();
+  });
+  test('testStore.testObj.data exist', () => {
+    expect(!testStore.testObj.data).toBeFalsy();
+  });
 });

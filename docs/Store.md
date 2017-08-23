@@ -21,7 +21,7 @@ new TodoStore()
 new TodoStore({id: 'xxx'})
 ```
 
-#### 只能通过this.method.data()获取相关数据, 参数类型是store对应的方法，尽量不要使用store.state或store.getState()获取数据
+#### 通过this.method.data()获取相关数据, 参数类型是store对应的方法，尽量不要使用store.state或store.getState()获取数据
 
 ```
 todos = this.todos.data();
@@ -55,7 +55,7 @@ editTodo(_todo){
     this.todos.dispatch(todos);
   }
 ```
-#### 注意数组的某个数据或对象的某个属性对象更新（嵌套对象），应新建该条数据并替换，在原对象中修改不会有数据更新
+#### 注意数组的元素或对象的属性是对象（嵌套对象）,且属性值发生改变,需替换该对象。在原对象中修改不会有数据更新
 
 
 ```

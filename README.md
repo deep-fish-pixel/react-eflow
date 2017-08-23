@@ -62,9 +62,7 @@ import someStore from '../store/SomeStore'
 class SomeComponent extends Component {
   constructor(props){
     super(props);
-    //调用someStore.doSomeThing
     someStore.doSomeThing();
-    //调用完成后，state值为： {doSomeThing:{request: true}}
   }
   render(){
     {/*在this.props.doSomeThing中则会有{request: true} 对象*/}
