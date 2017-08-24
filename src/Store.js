@@ -13,7 +13,7 @@ import DefaultObject from './DefaultObject';
 const emptyObject = {};
 Object.freeze(emptyObject);
 /*
- * 把参数列表属性合并后, 并获取新对象
+ * 属性合并, 并获取新对象
  * @param {Array | Object} target 合并的对象容器
  * @param {Array | Object} propName 合并容器的属性名称
  * @param {Array | Object} mergeValue 被合并的值
@@ -21,7 +21,7 @@ Object.freeze(emptyObject);
  * */
 function assign(target, propName, mergeValue, className, methodName, keyName) {
   let curValue = target[propName], nextValue;
-  //数组类型值不可覆盖只可替换为新数组,所以数据类型不能转化
+  //数组类型值只可替换为新数组,所以数据类型不能转化
   if(isArray(curValue)){
     if(arguments.length >= 3 && isArray(mergeValue)){
       nextValue = [...mergeValue];

@@ -80,7 +80,7 @@ describe('测试 布尔类型 转换', () => {
     testStore.testBooleanToObject();
     expect(testStore.testBoolean.data()).toEqual({test: true});
   });
-  test('对象转布尔值: 对象为不可转类型,故值为对象', () => {
+  test('对象转布尔,类型仍然对象', () => {
     testStore.testBooleanToObjectToBoolean();
     expect(testStore.testBoolean.data()).toEqual({test: true});
   });
