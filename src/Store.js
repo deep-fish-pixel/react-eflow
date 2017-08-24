@@ -8,38 +8,53 @@ import {isArray, isObject} from './types';
 import {getMethodName, getOriginalMethodName} from './method';
 import pubSub from './pubSub';
 import domBatchedUpdates from './domBatchedUpdates';
+import DefaultObject from './DefaultObject';
 
 const emptyObject = {};
 Object.freeze(emptyObject);
 /*
  * 把参数列表属性合并后, 并获取新对象
- * @param {Array | Object} curValue 第一个对象
- * @param {Array | Object} mergeValue 第二个对象
+ * @param {Array | Object} target 合并的对象容器
+ * @param {Array | Object} propName 合并容器的属性名称
+ * @param {Array | Object} mergeValue 被合并的值
  * @return {Array | Object}
  * */
-function assign(curValue, mergeValue, className, methodName, keyName) {
-  let nextValue;
+function assign(target, propName, mergeValue, className, methodName, keyName) {
+  let curValue = target[propName], nextValue;
+  //数组类型值不可覆盖只可替换为新数组,所以数据类型不能转化
   if(isArray(curValue)){
-    if(mergeValue){
-      process.env.NODE_ENV !== 'production'
-      && invariant(isArray(mergeValue), '调用%s.%s 方法, 参数值%s 的值类型不是数组', className, methodName, keyName);
+    if(arguments.length >= 3 && isArray(mergeValue)){
       nextValue = [...mergeValue];
     }
-    else{
+    if(!nextValue){
       nextValue = [...curValue];
     }
   }
+  //对象类型值不可覆盖只可扩展,所以数据类型不能转化
   else if(isObject(curValue)){
     mergeValue = mergeValue || emptyObject;
-    process.env.NODE_ENV !== 'production'
-    && invariant(isObject(mergeValue), '调用%s.%s 方法, 参数值%s 的值类型不是对象', className, methodName, keyName);
     nextValue = {...curValue, ...mergeValue};
   }
-  else if(curValue === null || curValue === undefined){
-    nextValue =  {...(mergeValue || emptyObject)};
-  }
   else{
-    nextValue = mergeValue || curValue;
+    //其他类型如基本类型,值可被覆盖但不可扩展,所以数据类型可以转化
+    if(arguments.length >= 3){
+      if(isArray(mergeValue)){
+        nextValue = [...mergeValue];
+      }
+      else if(isObject(mergeValue)){
+        nextValue = {...(mergeValue || emptyObject)};
+      }
+      else{
+        nextValue = mergeValue;
+      }
+    }
+    else{
+      nextValue = curValue;
+      //无初始值,获取属性为默认类的对象,该值可以被覆盖也可被扩展,所以数据类型可以转化
+      if(curValue === undefined && !target.hasOwnProperty(propName)){
+        nextValue = new DefaultObject();
+      }
+    }
   }
   return nextValue;
 }
@@ -69,7 +84,7 @@ class Store {
     let clone = {},
         state = this.state;
     for(var name in state){
-      clone[name] = assign(state[name]);
+      clone[name] = assign(state, name, state[name]);
     }
     return clone;
   }
@@ -87,7 +102,7 @@ class Store {
 
     process.env.NODE_ENV !== 'production'
     && invariant(name, '调用%s.data 方法, 参数值%s 的name或displayName为空, displayName属性在构造函数中进行初始化', getMethodName(this), name || 'method');
-    nextValue = assign(curValue, data);
+    nextValue = assign(state, name, data);
     if(!shallowEqual(curValue, nextValue, getMethodName(this), getMethodName(this.dispatch), name || 'method')){
       state[name] = nextValue;
       this.pub(method);
@@ -115,10 +130,10 @@ class Store {
     process.env.NODE_ENV !== 'production'
     && invariant(name, '调用%s.data 方法, 参数值%s 的name或displayName为空, displayName属性已在构造函数中进行初始化', getMethodName(this), getMethodName(method) || 'method');
     if(arguments.length >= 2){
-      this.state[name] = assign(this.state[name], value);
+      this.state[name] = assign(this.state, name, value);
     }
     else {
-      return assign(this.state[name]);
+      return assign(this.state, name);
     }
   }
 

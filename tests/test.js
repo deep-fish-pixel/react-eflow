@@ -5,19 +5,83 @@ class TestStore extends Store{
     super(options);
   }
 
-  testObj(){
-    let dispatch = this.testObj.dispatch;
-    let testData = this.testObj.data;
+  testBoolean(){
+    let dispatch = this.testBoolean.dispatch;
+    dispatch(false);
+  }
+  testBooleanTrue(){
+    let dispatch = this.testBoolean.dispatch;
+    dispatch(true);
+  }
+  testBooleanToNumber(){
+    let dispatch = this.testBoolean.dispatch;
+    dispatch(0);
+  }
+  testBooleanToString(){
+    let dispatch = this.testBoolean.dispatch;
+    dispatch('');
+  }
+  testBooleanToObject(){
+    let dispatch = this.testBoolean.dispatch;
+    dispatch({test: true});
+  }
+  testBooleanToObjectToBoolean(){
+    let dispatch = this.testBoolean.dispatch;
+    dispatch(true);
+  }
+
+  testNumber(){
+    let dispatch = this.testNumber.dispatch;
+    dispatch(0);
+  }
+  testPositiveNumber(){
+    let dispatch = this.testNumber.dispatch;
+    dispatch(1);
+  }
+  testNegativeNumber(){
+    let dispatch = this.testNumber.dispatch;
+    dispatch(-1);
+  }
+  testNegativeNumber(){
+    let dispatch = this.testNumber.dispatch;
+    dispatch(-1);
+  }
+  testNegativeNumber(){
+    let dispatch = this.testNumber.dispatch;
+    dispatch(-1);
   }
 }
 
 let testStore = new TestStore();
 
-describe('first group test', () => {
-  test('testStore.testObj.dispatch exist', () => {
-    expect(!testStore.testObj.dispatch).toBeFalsy();
+describe('测试 布尔类型 转换', () => {
+  test('未初始化值时, 为对象', () => {
+    expect(testStore.testBoolean.data()).toEqual({});
   });
-  test('testStore.testObj.data exist', () => {
-    expect(!testStore.testObj.data).toBeFalsy();
+  test('设置值为false', () => {
+    testStore.testBoolean();
+    expect(testStore.testBoolean.data()).toBeFalsy();
+  });
+  test('设置值为true', () => {
+    testStore.testBooleanTrue();
+    expect(testStore.testBoolean.data()).toBeTruthy();
+  });
+  test('布尔值转数字', () => {
+    testStore.testBooleanToNumber();
+    expect(testStore.testBoolean.data()).toBe(0);
+    testStore.testBoolean();
+  });
+  test('布尔值转字符串', () => {
+    testStore.testBooleanToString();
+    expect(testStore.testBoolean.data()).toBe('');
+    testStore.testBoolean();
+  });
+  test('布尔值转对象', () => {
+    testStore.testBooleanToObject();
+    expect(testStore.testBoolean.data()).toEqual({test: true});
+  });
+  test('对象转布尔值: 对象为不可转类型,故值为对象', () => {
+    testStore.testBooleanToObjectToBoolean();
+    expect(testStore.testBoolean.data()).toEqual({test: true});
   });
 });

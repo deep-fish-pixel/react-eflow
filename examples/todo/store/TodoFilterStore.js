@@ -5,7 +5,6 @@ import filterStore from './FilterStore'
 class TodoFilterStore extends Store{
   constructor(options){
     super(options);
-    this.count = 0;
     this.initState({
       filterTodos: []
     });

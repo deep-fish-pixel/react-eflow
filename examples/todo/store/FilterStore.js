@@ -2,7 +2,6 @@ import {Store} from '../../../src/eflow';
 class FilterStore extends Store{
   constructor(options){
     super(options);
-    this.count = 0;
     this.initState({
       filter: 'All'
     });
