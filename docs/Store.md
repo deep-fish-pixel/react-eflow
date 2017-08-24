@@ -1,4 +1,4 @@
-##Store
+## Store
  
 #### 继承Store来处理具体业务 
 

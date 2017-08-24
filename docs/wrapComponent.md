@@ -1,4 +1,4 @@
-##wrapComponent
+## wrapComponent
  
 #### 组件只调用store的接口，不需要wrapComponent
 
