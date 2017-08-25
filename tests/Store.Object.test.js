@@ -5,76 +5,105 @@ class TestStore extends Store{
     super(options);
   }
 
-  testNumber(){
-    let dispatch = this.testNumber.dispatch;
-    dispatch(false);
+  testObject(){
+    let dispatch = this.testObject.dispatch;
+    dispatch({});
   }
-  testZeroNumber(){
-    let dispatch = this.testNumber.dispatch;
+  testObjectListNumber(){
+    let dispatch = this.testObject.dispatch;
+    dispatch({
+      list: 1
+    });
+  }
+  testObjectListString(){
+    let dispatch = this.testObject.dispatch;
+    dispatch({
+      list: ''
+    });
+  }
+  testObjectListObject(){
+    let dispatch = this.testObject.dispatch;
+    dispatch({
+      list: {}
+    });
+  }
+  testObjectListObjectExtend(){
+    let dispatch = this.testObject.dispatch;
+    dispatch({
+      list: {
+        extend: 'test'
+      }
+    });
+  }
+  testObjectListArray(){
+    let dispatch = this.testObject.dispatch;
+    dispatch({
+      list: []
+    });
+  }
+  testObjectListArrayPush(){
+    let dispatch = this.testObject.dispatch;
+    dispatch({
+      list: [1, 2]
+    });
+
+  }
+  testObjectToNumber(){
+    let dispatch = this.testObject.dispatch;
     dispatch(0);
   }
-  testNegativeNumber(){
-    let dispatch = this.testNumber.dispatch;
-    dispatch(-1);
-  }
-  testPozitiveNumber(){
-    let dispatch = this.testNumber.dispatch;
-    dispatch(1);
-  }
-  testNumberToFalse(){
-    let dispatch = this.testNumber.dispatch;
+  testObjectToBoolean(){
+    let dispatch = this.testObject.dispatch;
     dispatch(false);
   }
-  testNumberToString(){
-    let dispatch = this.testNumber.dispatch;
+  testObjectToString(){
+    let dispatch = this.testObject.dispatch;
     dispatch('');
-  }
-  testNumberToArray(){
-    let dispatch = this.testNumber.dispatch;
-    dispatch([]);
-  }
-  testNumberToArrayToNumber(){
-    let dispatch = this.testNumber.dispatch;
-    dispatch(1);
   }
 }
 
 let testStore = new TestStore();
 
-describe('测试 数字类型 转换', () => {
-  test('未初始化值时, 为对象', () => {
-    expect(testStore.testNumber.data()).toEqual({});
+describe('测试 对象类型 转换', () => {
+  test('设置值{}', () => {
+    testStore.testObject();
+    expect(testStore.testObject.data()).toEqual({});
   });
-  test('设置值为0', () => {
-    testStore.testZeroNumber();
-    expect(testStore.testNumber.data()).toBe(0);
+  test('设置list值1', () => {
+    testStore.testObjectListNumber();
+    expect(testStore.testObject.data()).toEqual({list: 1});
   });
-  test('设置值为-1', () => {
-    testStore.testNegativeNumber();
-    expect(testStore.testNumber.data()).toBe(-1);
+  test('设置list值空串', () => {
+    testStore.testObjectListString();
+    expect(testStore.testObject.data()).toEqual({list: ''});
   });
-  test('设置值为1', () => {
-    testStore.testPozitiveNumber();
-    expect(testStore.testNumber.data()).toBe(1);
+  test('设置list值对象', () => {
+    testStore.testObjectListObject();
+    expect(testStore.testObject.data()).toEqual({list: {}});
   });
-  test('数字转布尔值', () => {
-    testStore.testNumberToFalse();
-    expect(testStore.testNumber.data()).toBeFalsy();
-    testStore.testZeroNumber();
+  test('设置list值对象并扩展', () => {
+    testStore.testObjectListObjectExtend();
+    expect(testStore.testObject.data()).toEqual({list: {extend: 'test'}});
   });
-  test('数字转字符串', () => {
-    testStore.testNumberToString();
-    expect(testStore.testNumber.data()).toBe('');
-    testStore.testNumber();
+  test('设置list值[]', () => {
+    testStore.testObjectListArray();
+    expect(testStore.testObject.data()).toEqual({list: []});
   });
-  test('数字转数组', () => {
-    testStore.testNumberToArray();
-    expect(testStore.testNumber.data()).toEqual([]);
-    expect(testStore.testNumber.data()).toHaveLength(0);
+  test('设置list值[1,2]', () => {
+    testStore.testObjectListArrayPush();
+    expect(testStore.testObject.data()).toEqual({list: [1, 2]});
+    testStore.testObjectListObject();
   });
-  test('数组转数字,类型仍然数组', () => {
-    testStore.testNumberToArrayToNumber();
-    expect(testStore.testNumber.data()).toEqual([]);
-    expect(testStore.testNumber.data()).toHaveLength(0);
+  test('对象类型转数字', () => {
+    testStore.testObjectToNumber();
+    expect(testStore.testObject.data()).toEqual({list: {}});
+  });
+  test('对象类型转布尔', () => {
+    testStore.testObjectToBoolean();
+    expect(testStore.testObject.data()).toEqual({list: {}});
+  });
+  test('对象类型转字符串', () => {
+    testStore.testObjectToString();
+    expect(testStore.testObject.data()).toEqual({list: {}});
   });
 });
