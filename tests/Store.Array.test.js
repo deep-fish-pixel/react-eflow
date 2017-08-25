@@ -5,76 +5,92 @@ class TestStore extends Store{
     super(options);
   }
 
-  testNumber(){
-    let dispatch = this.testNumber.dispatch;
-    dispatch(false);
-  }
-  testZeroNumber(){
-    let dispatch = this.testNumber.dispatch;
-    dispatch(0);
-  }
-  testNegativeNumber(){
-    let dispatch = this.testNumber.dispatch;
-    dispatch(-1);
-  }
-  testPozitiveNumber(){
-    let dispatch = this.testNumber.dispatch;
-    dispatch(1);
-  }
-  testNumberToFalse(){
-    let dispatch = this.testNumber.dispatch;
-    dispatch(false);
-  }
-  testNumberToString(){
-    let dispatch = this.testNumber.dispatch;
-    dispatch('');
-  }
-  testNumberToArray(){
-    let dispatch = this.testNumber.dispatch;
+  testArray(){
+    let dispatch = this.testArray.dispatch;
     dispatch([]);
   }
-  testNumberToArrayToNumber(){
-    let dispatch = this.testNumber.dispatch;
-    dispatch(1);
+  testArrayListNumber(){
+    let dispatch = this.testArray.dispatch;
+    dispatch([1]);
+  }
+  testArrayListString(){
+    let dispatch = this.testArray.dispatch;
+    dispatch(['']);
+  }
+  testArrayListArray(){
+    let dispatch = this.testArray.dispatch;
+    dispatch([{list: []}]);
+  }
+  testArrayListArrayExtend(){
+    let dispatch = this.testArray.dispatch;
+    dispatch([{
+      list: {
+        extend: 'test'
+      }
+    }]);
+  }
+  testArrayListArrayPush(){
+    let dispatch = this.testArray.dispatch;
+    dispatch([{
+      list: [1, 2]
+    }]);
+
+  }
+  testArrayToNumber(){
+    let dispatch = this.testArray.dispatch;
+    dispatch(0);
+  }
+  testArrayToBoolean(){
+    let dispatch = this.testArray.dispatch;
+    dispatch(false);
+  }
+  testArrayToString(){
+    let dispatch = this.testArray.dispatch;
+    dispatch('');
   }
 }
 
 let testStore = new TestStore();
 
-describe('测试 数字类型 转换', () => {
-  test('未初始化值时, 为对象', () => {
-    expect(testStore.testNumber.data()).toEqual({});
+describe('测试 数组类型 转换', () => {
+  test('设置值{}', () => {
+    testStore.testArray();
+    expect(testStore.testArray.data()).toEqual([]);
   });
-  test('设置值为0', () => {
-    testStore.testZeroNumber();
-    expect(testStore.testNumber.data()).toBe(0);
+  test('设置list值1', () => {
+    testStore.testArrayListNumber();
+    expect(testStore.testArray.data()).toEqual([1]);
   });
-  test('设置值为-1', () => {
-    testStore.testNegativeNumber();
-    expect(testStore.testNumber.data()).toBe(-1);
+  test('设置list值空串', () => {
+    testStore.testArrayListString();
+    expect(testStore.testArray.data()).toEqual(['']);
   });
-  test('设置值为1', () => {
-    testStore.testPozitiveNumber();
-    expect(testStore.testNumber.data()).toBe(1);
+  test('设置list值数组', () => {
+    testStore.testArrayListArray();
+    expect(testStore.testArray.data()).toEqual([{list: []}]);
   });
-  test('数字转布尔值', () => {
-    testStore.testNumberToFalse();
-    expect(testStore.testNumber.data()).toBeFalsy();
-    testStore.testZeroNumber();
+  test('设置list值数组并扩展', () => {
+    testStore.testArrayListArrayExtend();
+    expect(testStore.testArray.data()).toEqual([{list: {extend: 'test'}}]);
   });
-  test('数字转字符串', () => {
-    testStore.testNumberToString();
-    expect(testStore.testNumber.data()).toBe('');
-    testStore.testNumber();
+  test('设置list值[]', () => {
+    testStore.testArrayListArray();
+    expect(testStore.testArray.data()).toEqual([{list: []}]);
   });
-  test('数字转数组', () => {
-    testStore.testNumberToArray();
-    expect(testStore.testNumber.data()).toEqual([]);
-    expect(testStore.testNumber.data()).toHaveLength(0);
+  test('设置list值[1,2]', () => {
+    testStore.testArrayListArrayPush();
+    expect(testStore.testArray.data()).toEqual([{list: [1, 2]}]);
   });
-  test('数组转数字,类型仍然数组', () => {
-    testStore.testNumberToArrayToNumber();
-    expect(testStore.testNumber.data()).toEqual([]);
-    expect(testStore.testNumber.data()).toHaveLength(0);
+  test('数组类型转数字', () => {
+    testStore.testArrayToNumber();
+    expect(testStore.testArray.data()).toEqual([{"list": [1, 2]}]);
+  });
+  test('数组类型转布尔', () => {
+    testStore.testArrayToBoolean();
+    expect(testStore.testArray.data()).toEqual([{"list": [1, 2]}]);
+  });
+  test('数组类型转字符串', () => {
+    testStore.testArrayToString();
+    expect(testStore.testArray.data()).toEqual([{"list": [1, 2]}]);
   });
 });
