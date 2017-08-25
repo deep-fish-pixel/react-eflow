@@ -13,7 +13,7 @@ describe('测试 TODO: <TodoIndex />', () => {
   const todoIndex = mount(
     <TodoIndex />
   );
-  let todoNames = [1,2,3,4,5,6,7,8,9,10];
+  let todoNames = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
   let result = [],
       completes = 0;
 
@@ -49,42 +49,112 @@ describe('测试 TODO: <TodoIndex />', () => {
 
     console.log('随机完成任务数:' + completes, '完成结果任务数:' + completesCount);
     expect(completesCount).toBe(completes);
-  });
 
+  });
   test('切换Active状态', () => {
     let todoFooter = todoIndex.find('TodoFooter'),
-        filterElement = todoFooter.find('a').at(0);
-    let todoList = todoIndex.find('TodoList').find('li');
+      filterElement = todoFooter.find('a').at(0);
     filterElement.simulate('click');
-    let count = 0;
-    for(let i = 0; i < todoList.nodes.length; i++){
-      if(Object.getOwnPropertyNames(todoList.nodes[i]).length){
-        count++;
-      }
-    }
+
+    let todoItems = todoIndex.find('TodoList').find('TodoItem');
     let todos = todoFilterStore.filterTodos.data();
-    expect(todos.length).toBe(count);
+    console.log('当前Active任务数:' + todos.length);
+
+    expect(todos.length).toBe(todoItems.nodes.length);
+
+
+  });
+  test('Active列表,完成第一个任务', () => {
+    let todos = todoFilterStore.filterTodos.data();
+    let todoList = todoIndex.find('TodoList');
+    if(todos.length){
+      todoList.find('TodoItem').at(0).find('span').at(0).simulate('click');
+      completes ++;
+      result.pop();
+
+      let todoItems = todoIndex.find('TodoList').find('TodoItem');
+      todos = todoFilterStore.filterTodos.data();
+      console.log('完成第一个任务,Active任务数:' + todos.length);
+      expect(todos.length).toBe(todoItems.nodes.length);
+    }
+  });
+  test('Active列表删除任务', () => {
+    let todos = todoFilterStore.filterTodos.data();
+    let todoList = todoIndex.find('TodoList');
+    if(todos.length){
+      todoList.find('TodoItem').at(0).find('span').at(1).simulate('click');
+      completes ++;
+      result.pop();
+
+      let todoItems = todoIndex.find('TodoList').find('TodoItem');
+      todos = todoFilterStore.filterTodos.data();
+      console.log('删除1个任务,Active任务数:' + todos.length);
+      expect(todos.length).toBe(todoItems.nodes.length);
+    }
   });
   test('切换Complete状态', () => {
     let todoFooter = todoIndex.find('TodoFooter'),
-      filterElement = todoFooter.find('a').at(1);
-    let todoList = todoIndex.find('TodoList').find('li');
+        filterElement = todoFooter.find('a').at(1);
     filterElement.simulate('click');
-    let count = 0;
-    for(let i = 0; i < todoList.nodes.length; i++){
-      console.log(todoList.nodes[i]);
-      if(Object.getOwnPropertyNames(todoList.nodes[i]).length){
-        count++;
-      }
-    }
+
+    let todoItems = todoIndex.find('TodoList').find('TodoItem');
     let todos = todoFilterStore.filterTodos.data();
-    expect(todos.length).toBe(count);
+    console.log('当前Complete任务数:' + todos.length);
+    expect(todos.length).toBe(todoItems.nodes.length);
   });
+  test('Complete列表,完成第一个任务', () => {
+    let todos = todoFilterStore.filterTodos.data();
+    let todoList = todoIndex.find('TodoList');
+    if(todos.length){
+      todoList.find('TodoItem').at(0).find('span').at(0).simulate('click');
+      completes ++;
+      result.pop();
+
+      let todoItems = todoIndex.find('TodoList').find('TodoItem');
+      todos = todoFilterStore.filterTodos.data();
+      console.log('完成第一个任务,Complete任务数:' + todos.length);
+      expect(todos.length).toBe(todoItems.nodes.length);
+    }
+  });
+  test('Complete列表删除任务', () => {
+    let todos = todoFilterStore.filterTodos.data();
+    let todoList = todoIndex.find('TodoList');
+    if(todos.length){
+      todoList.find('TodoItem').at(0).find('span').at(1).simulate('click');
+      completes ++;
+      result.pop();
+
+      let todoItems = todoIndex.find('TodoList').find('TodoItem');
+      todos = todoFilterStore.filterTodos.data();
+      console.log('删除1个任务,Complete任务数:' + todos.length);
+      expect(todos.length).toBe(todoItems.nodes.length);
+    }
+  });
+
   test('切换All状态', () => {
     let todoFooter = todoIndex.find('TodoFooter'),
       filterElement = todoFooter.find('a').at(0);
     filterElement.simulate('click');
-    expect(todos.length).toBe(todoNames.length);
+
+    let todoItems = todoIndex.find('TodoList').find('TodoItem');
+    let todos = todoFilterStore.filterTodos.data();
+    console.log('All任务数:' + todos.length);
+    expect(todos.length).toBe(todoItems.nodes.length);
+  });
+
+  test('All列表删除任务', () => {
+    let todos = todoFilterStore.filterTodos.data();
+    let todoList = todoIndex.find('TodoList');
+    if(todos.length){
+      todoList.find('TodoItem').at(0).find('span').at(1).simulate('click');
+      completes ++;
+      result.pop();
+
+      let todoItems = todoIndex.find('TodoList').find('TodoItem');
+      todos = todoFilterStore.filterTodos.data();
+      console.log('删除1个任务,任务数:' + todos.length);
+      expect(todos.length).toBe(todoItems.nodes.length);
+    }
   });
 });
 
