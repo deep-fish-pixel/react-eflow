@@ -32,6 +32,7 @@ class TodoList extends Component {
 export default wrapComponent(TodoList, [todoFilterStore.filterTodos]);
 
 /*export default wrapComponent(TodoList, [todoStore.todos, {
- propsKey: 'todos2',
-  updater: todoStore.todos
+  //此时todoFilterStore.filterTodos对应的state值在组件TodoList的props中对应名称即为todos
+  propsKey: 'todos',
+  updater: todoFilterStore.filterTodos
 }]);*/

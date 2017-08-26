@@ -91,22 +91,24 @@ class Store {
     return clone;
   }
   /*
-  * 发布每个方法对应的数据, 注意method为方法,另外该方法如果值为空,有一个对象的默认值
+  * 发布方法对应的数据更新, 注意method为方法,另外该方法如果值为空,有一个对象的默认值
   *
   * @param {Function} method store实例的属性方法
   * @param {Object} value 对应的数值
   * */
   dispatch(method, value){
-    let state = this.state,
+    if(method){
+      let state = this.state,
         name = getOriginalMethodName(method),
         curValue = state[name],
         nextValue;
 
-    process.env.NODE_ENV !== 'production'
-    && invariant(name, '调用%s.data 方法, 参数值%s 的name或displayName为空, displayName属性在构造函数中进行初始化', getMethodName(this), name || 'method');
-    nextValue = assign(state, name, value);
-    this.updateQueue.push(method, curValue, nextValue);
-    state[name] = nextValue;
+      process.env.NODE_ENV !== 'production'
+      && invariant(name, '调用%s.data 方法, 参数值%s 的name或displayName为空, displayName属性在构造函数中进行初始化', getMethodName(this), name || 'method');
+      nextValue = assign(state, name, value);
+      this.updateQueue.push(method, curValue, nextValue);
+      state[name] = nextValue;
+    }
     this.updateQueue.exec((name, nextValue, method)=>{
       this.pub(method);
     });

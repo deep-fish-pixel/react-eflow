@@ -152,6 +152,3 @@ class TodoFilterStore extends Store{
   }
 }
 ```
-
-
-

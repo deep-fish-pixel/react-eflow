@@ -80,6 +80,7 @@ class SomeComponent extends Component {
 export default wrapComponent(SomeComponent, [someStore.doSomeThing]);
 ```
 ### 其他文档
+#### [Api介绍](./docs/Api.md)
 #### [Store使用介绍](./docs/Store.md)
 #### [wrapComponent使用介绍](./docs/wrapComponent.md)
 

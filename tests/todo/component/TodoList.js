@@ -14,8 +14,8 @@ class TodoList extends Component {
   }
 
   render(){
-    let filterTodos = this.props.filterTodos;
-    let todoViews = filterTodos && filterTodos.map(function (todo) {
+    let todos = this.props.todos;
+    let todoViews = todos && todos.map(function (todo) {
       return (
         <TodoItem key={todo.id} todo={todo}/>
       );
@@ -28,9 +28,10 @@ class TodoList extends Component {
   }
 }
 
-export default wrapComponent(TodoList, [todoFilterStore.filterTodos]);
+//export default wrapComponent(TodoList, [todoFilterStore.filterTodos]);
 
-/*export default wrapComponent(TodoList, [todoStore.todos, {
- propsKey: 'todos2',
-  updater: todoStore.todos
-}]);*/
+export default wrapComponent(TodoList, [{
+  //此时todoFilterStore.filterTodos对应的state值在组件TodoList的props中对应名称即为todos
+  propsKey: 'todos',
+  updater: todoFilterStore.filterTodos
+}]);

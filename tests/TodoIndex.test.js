@@ -91,7 +91,7 @@ describe('测试 TODO: <TodoIndex />', () => {
 
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
       todos = todoFilterStore.filterTodos.data();
-      console.log('删除1个任务,Active任务数:' + todos.length);
+      console.log('删除1个任务,剩余Active任务数:' + todos.length);
       expect(todos.length).toBe(todoItems.nodes.length);
     }
   });
@@ -129,7 +129,7 @@ describe('测试 TODO: <TodoIndex />', () => {
 
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
       todos = todoFilterStore.filterTodos.data();
-      console.log('删除1个任务,Complete任务数:' + todos.length);
+      console.log('删除1个任务,剩余Complete任务数:' + todos.length);
       expect(todos.length).toBe(todoItems.nodes.length);
     }
   });
@@ -155,7 +155,7 @@ describe('测试 TODO: <TodoIndex />', () => {
 
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
       todos = todoFilterStore.filterTodos.data();
-      console.log('删除1个任务,任务数:' + todos.length);
+      console.log('删除1个任务,剩余任务数:' + todos.length);
       expect(todos.length).toBe(todoItems.nodes.length);
     }
   });
@@ -175,7 +175,7 @@ describe('测试 TODO: <TodoIndex />', () => {
 
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
       todos = todoFilterStore.filterTodos.data();
-      console.log(`删除${length - Math.floor(length/2)}个任务,任务数:` + todos.length);
+      console.log(`删除${length - Math.floor(length/2)}个任务,剩余任务数:` + todos.length);
       expect(length - Math.floor(length/2)).toBe(todoItems.nodes.length);
     }
   });

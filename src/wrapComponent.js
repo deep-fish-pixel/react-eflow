@@ -74,7 +74,8 @@ let wrapComponent = function(_Component, updaters, customPropsMapping){
         let isMethod,
           propsKey,
           _eflowKey,
-          updater;
+          updater,
+          originUpdater;
         //遍历updaters, 处理updater的绑定事件
         for(let i = 0; i < updaters.length; i++){
           updater = updaters[i];
@@ -87,10 +88,11 @@ let wrapComponent = function(_Component, updaters, customPropsMapping){
           }
 
           isMethod = isFunction(updater);
+          originUpdater = updater;
           updater = isMethod ? updater : updater.updater;
           propsKey = isMethod
             ? getOriginalMethodName(updater)
-            : updater.propsKey
+            : originUpdater.propsKey
           || getOriginalMethodName(updater);
           _eflowKey = updater._eflowKey;
           store = updater.ref;
