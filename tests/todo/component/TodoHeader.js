@@ -20,6 +20,7 @@ class TodoHeader extends Component {
       this.setState({
         value: ''
       });
+      todoStore.operateTodos();
     }
   }
 

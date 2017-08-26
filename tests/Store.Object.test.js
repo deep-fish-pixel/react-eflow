@@ -69,6 +69,9 @@ describe('测试 对象类型 转换', () => {
     testStore.testObject();
     expect(testStore.testObject.data()).toEqual({});
   });
+  test('获取store', () => {
+    expect(testStore.getState()).toEqual({testObject: {}});
+  });
   test('设置list值1', () => {
     testStore.testObjectListNumber();
     expect(testStore.testObject.data()).toEqual({list: 1});

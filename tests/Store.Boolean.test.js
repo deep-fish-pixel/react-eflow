@@ -62,6 +62,9 @@ describe('测试 布尔类型 转换', () => {
     testStore.testBoolean();
     expect(testStore.testBoolean.data()).toBeFalsy();
   });
+  test('获取store', () => {
+    expect(testStore.getState()).toEqual({testBoolean: false});
+  });
   test('设置值为true', () => {
     testStore.testBooleanTrue();
     expect(testStore.testBoolean.data()).toBeTruthy();

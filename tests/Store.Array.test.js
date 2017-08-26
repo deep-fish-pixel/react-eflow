@@ -57,6 +57,9 @@ describe('测试 数组类型 转换', () => {
     testStore.testArray();
     expect(testStore.testArray.data()).toEqual([]);
   });
+  test('获取store', () => {
+    expect(testStore.getState()).toEqual({testArray: []});
+  });
   test('设置list值1', () => {
     testStore.testArrayListNumber();
     expect(testStore.testArray.data()).toEqual([1]);

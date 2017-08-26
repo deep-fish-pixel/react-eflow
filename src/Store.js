@@ -9,6 +9,7 @@ import {getMethodName, getOriginalMethodName} from './method';
 import pubSub from './pubSub';
 import domBatchedUpdates from './domBatchedUpdates';
 import DefaultObject from './DefaultObject';
+import UpdateQueue from './UpdateQueue';
 
 const emptyObject = {};
 Object.freeze(emptyObject);
@@ -19,7 +20,7 @@ Object.freeze(emptyObject);
  * @param {Array | Object} mergeValue 被合并的值
  * @return {Array | Object}
  * */
-function assign(target, propName, mergeValue, className, methodName, keyName) {
+function assign(target, propName, mergeValue, className, methodName) {
   let curValue = target[propName], nextValue;
   //数组类型值只可替换为新数组,所以数据类型不能转化
   if(isArray(curValue)){
@@ -70,6 +71,7 @@ class Store {
   constructor(options){
     this.state = {};
     this.options = options;
+    this.updateQueue = new UpdateQueue();
     initProperties(this, options && options.id);
   }
 
@@ -92,9 +94,9 @@ class Store {
   * 发布每个方法对应的数据, 注意method为方法,另外该方法如果值为空,有一个对象的默认值
   *
   * @param {Function} method store实例的属性方法
-  * @param {Object} data 对应的数值
+  * @param {Object} value 对应的数值
   * */
-  dispatch(method, data){
+  dispatch(method, value){
     let state = this.state,
         name = getOriginalMethodName(method),
         curValue = state[name],
@@ -102,11 +104,12 @@ class Store {
 
     process.env.NODE_ENV !== 'production'
     && invariant(name, '调用%s.data 方法, 参数值%s 的name或displayName为空, displayName属性在构造函数中进行初始化', getMethodName(this), name || 'method');
-    nextValue = assign(state, name, data);
-    if(!shallowEqual(curValue, nextValue, getMethodName(this), getMethodName(this.dispatch), name || 'method')){
-      state[name] = nextValue;
+    nextValue = assign(state, name, value);
+    this.updateQueue.push(method, curValue, nextValue);
+    state[name] = nextValue;
+    this.updateQueue.exec((name, nextValue, method)=>{
       this.pub(method);
-    }
+    });
   }
   /*
    * 绑定method对应dispatch, 内部通过method的name或displayName来标识key
@@ -130,7 +133,13 @@ class Store {
     process.env.NODE_ENV !== 'production'
     && invariant(name, '调用%s.data 方法, 参数值%s 的name或displayName为空, displayName属性已在构造函数中进行初始化', getMethodName(this), getMethodName(method) || 'method');
     if(arguments.length >= 2){
-      this.state[name] = assign(this.state, name, value);
+      let state = this.state,
+        curValue = state[name];
+      let nextValue = assign(state, name, value);
+      if(!shallowEqual(curValue, nextValue)){
+        this.updateQueue.push(method, curValue, nextValue);
+        state[name] = nextValue;
+      }
     }
     else {
       return assign(this.state, name);

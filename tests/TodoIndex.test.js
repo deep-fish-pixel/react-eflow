@@ -13,14 +13,17 @@ describe('测试 TODO: <TodoIndex />', () => {
   const todoIndex = mount(
     <TodoIndex />
   );
-  let todoNames = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+  let todoNames = [];
+  for(let i = 0; i < 50; i++){
+    todoNames.push(i + 1);
+  }
   let result = [],
       completes = 0;
 
   test(`创建${todoNames.length}个任务`, () => {
     let todoHeader = todoIndex.find('TodoHeader');
-    todoNames.forEach(function (name) {
-      todoHeader.node.simulateEnterDown(name);
+    todoNames.forEach(function (text) {
+      todoHeader.node.simulateEnterDown(text);
     });
     let todoList = todoIndex.find('TodoList');
     expect(todoList.find('li').nodes).toHaveLength(todoNames.length);
@@ -154,6 +157,26 @@ describe('测试 TODO: <TodoIndex />', () => {
       todos = todoFilterStore.filterTodos.data();
       console.log('删除1个任务,任务数:' + todos.length);
       expect(todos.length).toBe(todoItems.nodes.length);
+    }
+  });
+
+  test('使用data方法多次保存数据,最后使用dispatch发布', () => {
+    let todos = todoStore.todos.data();
+    let todoList = todoIndex.find('TodoList');
+    let length = todos.length, cacheOperates;
+    if(length){
+      todoStore.operateTodos(function (updateQueue, todos) {
+        cacheOperates = Object.getOwnPropertyNames(updateQueue.queue);
+        expect(cacheOperates.length).toBe(2);
+      }, function (updateQueue, todos) {
+        cacheOperates = Object.getOwnPropertyNames(updateQueue.queue);
+        expect(cacheOperates.length).toBe(0);
+      });
+
+      let todoItems = todoIndex.find('TodoList').find('TodoItem');
+      todos = todoFilterStore.filterTodos.data();
+      console.log(`删除${length - Math.floor(length/2)}个任务,任务数:` + todos.length);
+      expect(length - Math.floor(length/2)).toBe(todoItems.nodes.length);
     }
   });
 });

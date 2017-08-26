@@ -49,6 +49,9 @@ describe('测试 数字类型 转换', () => {
     testStore.testZeroNumber();
     expect(testStore.testNumber.data()).toBe(0);
   });
+  test('获取store', () => {
+    expect(testStore.getState()).toEqual({testNumber: 0});
+  });
   test('设置值为-1', () => {
     testStore.testNegativeNumber();
     expect(testStore.testNumber.data()).toBe(-1);

@@ -13,12 +13,34 @@ class TodoStore extends Store{
     var dispatch = this.addTodo.dispatch;
 
     dispatch({request: true});
-    var self = this;
     dispatch({request: false});
-    self.todos({
+    this.todos({
       text: text,
-      id: ++ self.count
+      id: ++ this.count
     });
+  }
+
+  operateTodos(prevDispatchCallback, dispatchCallback){
+    let dispatch = this.todos.dispatch,
+      data = this.todos.data,
+      todos = this.todos.data(),
+      length = todos.length;
+    this.addTodo.data({request: true});
+    this.addTodo.data({request: false});
+    this.addTodo.data({request: true});
+    for(var i = 0; i < length; i++){
+      if(i < length / 2){
+        todos[i] = {...todos[i], completed: !todos[i].completed};
+        data(todos);
+      }
+      else{
+        todos.pop();
+        data(todos);
+      }
+    }
+    prevDispatchCallback && prevDispatchCallback.call(this, this.updateQueue, todos);
+    dispatch(todos);
+    dispatchCallback && dispatchCallback.call(this, this.updateQueue, todos);
   }
 
   todos(todo){
