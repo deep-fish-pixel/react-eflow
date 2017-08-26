@@ -7,6 +7,7 @@ import todoStore from '../store/TodoStore';
 class TodoHeader extends Component {
   constructor(props){
     super(props);
+
     this.enterDown = this.enterDown.bind(this);
     this.change = this.change.bind(this);
     this.state = {value: ''};

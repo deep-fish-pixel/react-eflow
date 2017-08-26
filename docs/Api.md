@@ -72,6 +72,12 @@
    无参数时,获取该方法的值
    有参数时,设置该方法的值
    等同于 store.data(store.data, value)
+  
+3. store.method.flowFrom(source)
+   
+   指定该方法跟随source方法同步更新
+   不同方法之间的更新绑定,
+   既可以同一store之间方法绑定,也可不同的store方法绑定
    
 #### wrapComponent
 

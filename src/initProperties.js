@@ -34,6 +34,9 @@ export default function initProperties(obj, id) {
         };
         method.displayName = getKeyByWords(id, methodName);
       }
+      else{
+        method.displayName = methodName;
+      }
 
       let extend = {
         //获取key名称
@@ -46,15 +49,15 @@ export default function initProperties(obj, id) {
         data: obj.data.bind(obj, method),
         ref: obj,
         flows: {},
-        //指定该方法跟随flower方法同步更新
-        flowFrom: function (flower) {
-          let _eflowKey = flower._eflowKey;
+        //指定该方法跟随source方法同步更新
+        flowFrom: function (source) {
+          let _eflowKey = source._eflowKey;
           process.env.NODE_ENV !== 'production'
           && invariant(
             _eflowKey,
             '%s.%s 方法, _eflowKey值为空',
-            getMethodName(flower.ref.constructor),
-            getMethodName(flower) || 'method'
+            getMethodName(source.ref.constructor),
+            getMethodName(source) || 'method'
           );
           process.env.NODE_ENV !== 'production'
           && invariant(
@@ -62,8 +65,8 @@ export default function initProperties(obj, id) {
             '%s.%s 已同步 %s.%s',
             getMethodName(this.ref.constructor),
             getMethodName(this) || 'method',
-            getMethodName(flower.ref.constructor),
-            getMethodName(flower) || 'method'
+            getMethodName(source.ref.constructor),
+            getMethodName(source) || 'method'
           );
           this.flows[_eflowKey] = function sync() {
             obj[methodName]();
