@@ -27,6 +27,14 @@ describe('测试 TODO: <TodoIndex />', () => {
     });
     let todoList = todoIndex.find('TodoList');
     expect(todoList.find('li').nodes).toHaveLength(todoNames.length);
+
+
+    let todoFooter = todoIndex.find('TodoFooter');
+    expect(todoFooter.find('span').at(0).text())
+      .toBe(todoNames.length > 1
+        ? todoNames.length + ' items'
+        : todoNames.length + ' item');
+
   });
   test('随机反转任务, 结果是否相同', () => {
     let todoList = todoIndex.find('TodoList');
@@ -53,6 +61,12 @@ describe('测试 TODO: <TodoIndex />', () => {
     console.log('随机反转任务数:' + completes, '反转结果任务数:' + completesCount);
     expect(completesCount).toBe(completes);
 
+    let todoFooter = todoIndex.find('TodoFooter');
+    expect(todoFooter.find('span').at(0).text())
+      .toBe(todoNames.length > 1
+        ? todoNames.length + ' items'
+        : todoNames.length + ' item');
+
   });
   test('切换Active状态', () => {
     let todoFooter = todoIndex.find('TodoFooter'),
@@ -65,7 +79,10 @@ describe('测试 TODO: <TodoIndex />', () => {
 
     expect(todos.length).toBe(todoItems.nodes.length);
 
-
+    expect(todoFooter.find('span').at(0).text())
+      .toBe(todos.length > 1
+        ? todos.length + ' items'
+        : todos.length + ' item');
   });
   test('Active列表,完成第一个任务', () => {
     let todos = todoFilterStore.filterTodos.data();
@@ -79,6 +96,12 @@ describe('测试 TODO: <TodoIndex />', () => {
       todos = todoFilterStore.filterTodos.data();
       console.log('完成第一个任务,Active任务数:' + todos.length);
       expect(todos.length).toBe(todoItems.nodes.length);
+
+      let todoFooter = todoIndex.find('TodoFooter');
+      expect(todoFooter.find('span').at(0).text())
+        .toBe(todos.length > 1
+          ? todos.length + ' items'
+          : todos.length + ' item');
     }
   });
   test('Active列表删除任务', () => {
@@ -93,6 +116,12 @@ describe('测试 TODO: <TodoIndex />', () => {
       todos = todoFilterStore.filterTodos.data();
       console.log('删除1个任务,剩余Active任务数:' + todos.length);
       expect(todos.length).toBe(todoItems.nodes.length);
+
+      let todoFooter = todoIndex.find('TodoFooter');
+      expect(todoFooter.find('span').at(0).text())
+        .toBe(todos.length > 1
+          ? todos.length + ' items'
+          : todos.length + ' item');
     }
   });
   test('切换Complete状态', () => {
@@ -104,6 +133,11 @@ describe('测试 TODO: <TodoIndex />', () => {
     let todos = todoFilterStore.filterTodos.data();
     console.log('当前Complete任务数:' + todos.length);
     expect(todos.length).toBe(todoItems.nodes.length);
+
+    expect(todoFooter.find('span').at(0).text())
+      .toBe(todos.length > 1
+        ? todos.length + ' items'
+        : todos.length + ' item');
   });
   test('Complete列表,完成第一个任务', () => {
     let todos = todoFilterStore.filterTodos.data();
@@ -117,6 +151,12 @@ describe('测试 TODO: <TodoIndex />', () => {
       todos = todoFilterStore.filterTodos.data();
       console.log('完成第一个任务,Complete任务数:' + todos.length);
       expect(todos.length).toBe(todoItems.nodes.length);
+
+      let todoFooter = todoIndex.find('TodoFooter');
+      expect(todoFooter.find('span').at(0).text())
+        .toBe(todos.length > 1
+          ? todos.length + ' items'
+          : todos.length + ' item');
     }
   });
   test('Complete列表删除任务', () => {
@@ -131,6 +171,12 @@ describe('测试 TODO: <TodoIndex />', () => {
       todos = todoFilterStore.filterTodos.data();
       console.log('删除1个任务,剩余Complete任务数:' + todos.length);
       expect(todos.length).toBe(todoItems.nodes.length);
+
+      let todoFooter = todoIndex.find('TodoFooter');
+      expect(todoFooter.find('span').at(0).text())
+        .toBe(todos.length > 1
+          ? todos.length + ' items'
+          : todos.length + ' item');
     }
   });
 

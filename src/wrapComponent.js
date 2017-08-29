@@ -28,7 +28,7 @@ function getState(store, propsKey, updater, customPropsMapping, forceUpdate) {
     state = this.state;
   }
   if(customPropsMapping){
-    state = customPropsMapping(state, this.props);
+    Object.assign(state, customPropsMapping(state, this.props));
   }
   forceUpdate && this.setState(state);
   return state;

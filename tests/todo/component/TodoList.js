@@ -34,4 +34,8 @@ export default wrapComponent(TodoList, [{
   //此时todoFilterStore.filterTodos对应的state值在组件TodoList的props中对应名称即为todos
   propsKey: 'todos',
   updater: todoFilterStore.filterTodos
-}]);
+}], function (state, oldProps) {
+  return {
+    itemLength: state.todos.length
+  }
+});
