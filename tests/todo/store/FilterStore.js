@@ -25,5 +25,4 @@ class FilterStore extends Store{
   }
 
 }
-
 export default new FilterStore();

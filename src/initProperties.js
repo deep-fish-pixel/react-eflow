@@ -29,8 +29,8 @@ export default function initProperties(obj, id) {
       * */
       if(id){
         let protoMethod = method;
-        method = obj[methodName] = function (...args) {
-          protoMethod.apply(this, args);
+        method = obj[methodName] = function () {
+          return protoMethod.apply(this, Array.prototype.slice.apply(arguments));
         };
         method.displayName = getKeyByWords(id, methodName);
       }

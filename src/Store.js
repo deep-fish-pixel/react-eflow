@@ -3,6 +3,7 @@
  */
 import shallowEqual from 'shallowequal';
 import invariant from 'invariant';
+import {forEachPrototype} from './prototype';
 import initProperties from './initProperties';
 import {isArray, isObject} from './types';
 import {getMethodName, getOriginalMethodName} from './method';
@@ -194,6 +195,17 @@ class Store {
     process.env.NODE_ENV !== 'production'
     && invariant(key, '调用%s.pub 方法, 参数值%s 的_eflowKey为空, 该属性已在构造函数中进行初始化', getMethodName(this), getMethodName(method) || 'method');
     pubSub.pub(key);
+  }
+  /*
+  * 销毁处理
+  * */
+  destory(){
+    this.state = null;
+    this.options = null;
+    this.updateQueue = null;
+    forEachPrototype(this, function (method, methodName) {
+      method.destory();
+    })
   }
 }
 

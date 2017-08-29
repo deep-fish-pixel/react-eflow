@@ -20,17 +20,21 @@ import {replaceElement} from './Array';
 * @param {Boolean} forceUpdate 是否需要设置组件的state, 使state起作用
 * */
 function getState(store, propsKey, updater, customPropsMapping, forceUpdate) {
-  let state = {};
+  let state = this.state;
   if(propsKey && updater){
     state[propsKey] = store.data(updater);
-  }
-  else{
-    state = this.state;
   }
   if(customPropsMapping){
     Object.assign(state, customPropsMapping(state, this.props));
   }
-  forceUpdate && this.setState(state);
+  if(forceUpdate){
+    //强制更新标识
+    this.__stateShouldUpdate = true;
+    this.setState(state, ()=> {
+      this.__stateShouldUpdate = false;
+    });
+  }
+
   return state;
 }
 
@@ -55,11 +59,13 @@ let wrapComponent = function(_Component, updaters, customPropsMapping){
 
     componentWillUnmount(){
       this.off();
+      this.__stateShouldUpdate = null;
     }
 
     shouldComponentUpdate(nextProps, nextState){
-      return !shallowEqual(this.props, nextProps)
-        || !shallowEqual(this.state, nextState);//todo: 可优化处理
+      return this.__stateShouldUpdate
+        || !shallowEqual(this.props, nextProps)
+        || !shallowEqual(this.state, nextState);
     }
 
     /*

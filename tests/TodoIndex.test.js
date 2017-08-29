@@ -26,8 +26,9 @@ describe('测试 TODO: <TodoIndex />', () => {
       todoHeader.node.simulateEnterDown(text);
     });
     let todoList = todoIndex.find('TodoList');
-    expect(todoList.find('li').nodes).toHaveLength(todoNames.length);
+    expect(todoList.find('ul').text()).not.toBe('todos!==todos2');
 
+    expect(todoList.find('li').nodes).toHaveLength(todoNames.length);
 
     let todoFooter = todoIndex.find('TodoFooter');
     expect(todoFooter.find('span').at(0).text())
@@ -92,6 +93,8 @@ describe('测试 TODO: <TodoIndex />', () => {
       completes ++;
       result.pop();
 
+      expect(todoList.find('ul').text()).not.toBe('todos!==todos2');
+
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
       todos = todoFilterStore.filterTodos.data();
       console.log('完成第一个任务,Active任务数:' + todos.length);
@@ -111,6 +114,8 @@ describe('测试 TODO: <TodoIndex />', () => {
       todoList.find('TodoItem').at(0).find('span').at(1).simulate('click');
       completes ++;
       result.pop();
+
+      expect(todoList.find('ul').text()).not.toBe('todos!==todos2');
 
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
       todos = todoFilterStore.filterTodos.data();
@@ -147,6 +152,8 @@ describe('测试 TODO: <TodoIndex />', () => {
       completes ++;
       result.pop();
 
+      expect(todoList.find('ul').text()).not.toBe('todos!==todos2');
+
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
       todos = todoFilterStore.filterTodos.data();
       console.log('完成第一个任务,Complete任务数:' + todos.length);
@@ -166,6 +173,8 @@ describe('测试 TODO: <TodoIndex />', () => {
       todoList.find('TodoItem').at(0).find('span').at(1).simulate('click');
       completes ++;
       result.pop();
+
+      expect(todoList.find('ul').text()).not.toBe('todos!==todos2');
 
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
       todos = todoFilterStore.filterTodos.data();
@@ -199,6 +208,8 @@ describe('测试 TODO: <TodoIndex />', () => {
       completes ++;
       result.pop();
 
+      expect(todoList.find('ul').text()).not.toBe('todos!==todos2');
+
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
       todos = todoFilterStore.filterTodos.data();
       console.log('删除1个任务,剩余任务数:' + todos.length);
@@ -218,6 +229,8 @@ describe('测试 TODO: <TodoIndex />', () => {
         cacheOperates = Object.getOwnPropertyNames(updateQueue.queue);
         expect(cacheOperates.length).toBe(0);
       });
+
+      expect(todoList.find('ul').text()).not.toBe('todos!==todos2');
 
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
       todos = todoFilterStore.filterTodos.data();

@@ -59,7 +59,11 @@
 6. pub(method)
     
    强制发布方法对应的数据, 推荐使用dispatch发布数据
-
+   
+7. destory()
+       
+   销毁处理
+  
     
 #### store.method
 

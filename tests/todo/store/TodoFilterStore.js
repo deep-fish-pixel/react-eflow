@@ -39,4 +39,8 @@ class TodoFilterStore extends Store{
 
 }
 
+let todoFilterStoreTest = new TodoFilterStore({id: 'todoFilterStore2'});
+export {
+  todoFilterStoreTest
+};
 export default new TodoFilterStore();

@@ -25,5 +25,8 @@ class FilterStore extends Store{
   }
 
 }
-
+let filterStore2 = new FilterStore('filterStore2');
+export {
+  filterStore2
+};
 export default new FilterStore();
