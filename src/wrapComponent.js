@@ -57,10 +57,10 @@ let wrapComponent = function(_Component, updaters, customPropsMapping){
       this.off();
     }
 
-    shouldComponentUpdate(nextProps, nextState){
+    /*shouldComponentUpdate(nextProps, nextState){
       return !shallowEqual(this.props, nextProps)
         || !shallowEqual(this.state, nextState);
-    }
+    }*/
 
     /*
      * 绑定相关组件的更新

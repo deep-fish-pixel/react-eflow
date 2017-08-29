@@ -78,7 +78,9 @@ class Store {
   initState(inits){
     let state = this.state;
     for(let name in inits){
-      state[name] = inits[name];
+      if (inits.hasOwnProperty(name)){
+        state[name] = inits[name];
+      }
     }
   }
 
@@ -86,7 +88,9 @@ class Store {
     let clone = {},
         state = this.state;
     for(var name in state){
-      clone[name] = assign(state, name, state[name]);
+      if (state.hasOwnProperty(name)){
+        clone[name] = assign(state, name, state[name]);
+      }
     }
     return clone;
   }
@@ -99,19 +103,46 @@ class Store {
   dispatch(method, value){
     if(method){
       let state = this.state,
-        name = getOriginalMethodName(method),
-        curValue = state[name],
-        nextValue;
+        name = getOriginalMethodName(method);
 
       process.env.NODE_ENV !== 'production'
       && invariant(name, '调用%s.data 方法, 参数值%s 的name或displayName为空, displayName属性在构造函数中进行初始化', getMethodName(this), name || 'method');
-      nextValue = assign(state, name, value);
-      this.updateQueue.push(method, curValue, nextValue);
-      state[name] = nextValue;
+      this.change(state, name, value, method);
     }
     this.updateQueue.exec((name, nextValue, method)=>{
       this.pub(method);
     });
+  }
+
+  /*
+  * 检查value是否有变更,若果有就加入队列
+  * */
+  change(state, name, value, method) {
+    let curValue = state[name],
+      nextValue,
+      shouldUpdate;
+    nextValue = assign(state, name, value);
+
+    //如果value是对象,进行深度检测
+    if (isObject(value)) {
+      if (shallowEqual(curValue, nextValue)) {
+        for (let propName in value) {
+          if (value.hasOwnProperty(propName)
+            && !shallowEqual(curValue[propName], value[propName])) {
+            shouldUpdate = true;
+            break;
+          }
+        }
+      }
+      else {
+        shouldUpdate = true;
+      }
+    }
+
+    if (shouldUpdate || !shallowEqual(curValue, nextValue)) {
+      this.updateQueue.push(method, curValue, nextValue);
+      state[name] = nextValue;
+    }
   }
   /*
    * 绑定method对应dispatch, 内部通过method的name或displayName来标识key
@@ -135,15 +166,21 @@ class Store {
     process.env.NODE_ENV !== 'production'
     && invariant(name, '调用%s.data 方法, 参数值%s 的name或displayName为空, displayName属性已在构造函数中进行初始化', getMethodName(this), getMethodName(method) || 'method');
     if(arguments.length >= 2){
-      let state = this.state,
-        curValue = state[name];
-      let nextValue = assign(state, name, value);
-      if(!shallowEqual(curValue, nextValue)){
-        this.updateQueue.push(method, curValue, nextValue);
-        state[name] = nextValue;
-      }
+      this.change(this.state, name, value, method)
     }
     else {
+      let state = this.state,
+        curValue = state[name],
+        newValue;
+      if(isObject(curValue) && !isArray(curValue)){
+        newValue =  {};
+        for(let propName in curValue){
+          if (curValue.hasOwnProperty(propName)){
+            newValue[propName] = assign(curValue, propName);
+          }
+        }
+        return newValue;
+      }
       return assign(this.state, name);
     }
   }

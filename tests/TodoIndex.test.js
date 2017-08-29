@@ -28,7 +28,7 @@ describe('测试 TODO: <TodoIndex />', () => {
     let todoList = todoIndex.find('TodoList');
     expect(todoList.find('li').nodes).toHaveLength(todoNames.length);
   });
-  test('随机完成任务, 结果是否相同', () => {
+  test('随机反转任务, 结果是否相同', () => {
     let todoList = todoIndex.find('TodoList');
 
     todoNames.forEach(function (name, index) {
