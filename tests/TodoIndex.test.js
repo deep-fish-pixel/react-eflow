@@ -50,7 +50,7 @@ describe('测试 TODO: <TodoIndex />', () => {
       }
     });
 
-    console.log('随机完成任务数:' + completes, '完成结果任务数:' + completesCount);
+    console.log('随机反转任务数:' + completes, '反转结果任务数:' + completesCount);
     expect(completesCount).toBe(completes);
 
   });
