@@ -1,9 +1,10 @@
 # react-eflow
 ##### eflow 通过使用默认配置策略来管理数据流，所以使用起来高效简单。
 
-1. 使用Store管理数据，Store的方法有2个作用，既可以用于处理相关业务数据，又可通过该方法的dispatch方法发布数据，数据存在Store的缓存中，该属性与该方法同名。
+1. 使用Store管理所有数据，通过Store的方法调用，Store内部既可以dispatch又能reduce。Store的方法有2个作用，既可以用于处理相关业务数据，又可通过该方法的dispatch发布数据，数据存在Store中(state)，属性名称与该方法同名，起到reduce功能。
 2. 通过wrapComponent包装用户组件 `wrapComponent(SomeComponent, [xxxStore.doSomething])`
 在SomeComponent的props.doSomething中则自动绑定xxxStore在doSomething方法中dispatch的参数合集数据
+![](./assets/eflow.jpeg)
 
 ### 安装
 

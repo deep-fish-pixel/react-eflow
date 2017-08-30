@@ -26,7 +26,7 @@ describe('测试 TODO: <TodoIndex />', () => {
       todoHeader.node.simulateEnterDown(text);
     });
     let todoList = todoIndex.find('TodoList');
-    expect(todoList.find('ul').text()).not.toBe('todos!==todos2');
+    expect(todoList.find('ul').text()).not.toBe('customPropsMapping|Updaters|TodoFilterStoreTest error');
 
     expect(todoList.find('li').nodes).toHaveLength(todoNames.length);
 
@@ -93,7 +93,7 @@ describe('测试 TODO: <TodoIndex />', () => {
       completes ++;
       result.pop();
 
-      expect(todoList.find('ul').text()).not.toBe('todos!==todos2');
+      expect(todoList.find('ul').text()).not.toBe('customPropsMapping|Updaters|TodoFilterStoreTest error');
 
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
       todos = todoFilterStore.filterTodos.data();
@@ -115,7 +115,7 @@ describe('测试 TODO: <TodoIndex />', () => {
       completes ++;
       result.pop();
 
-      expect(todoList.find('ul').text()).not.toBe('todos!==todos2');
+      expect(todoList.find('ul').text()).not.toBe('customPropsMapping|Updaters|TodoFilterStoreTest error');
 
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
       todos = todoFilterStore.filterTodos.data();
@@ -152,7 +152,7 @@ describe('测试 TODO: <TodoIndex />', () => {
       completes ++;
       result.pop();
 
-      expect(todoList.find('ul').text()).not.toBe('todos!==todos2');
+      expect(todoList.find('ul').text()).not.toBe('customPropsMapping|Updaters|TodoFilterStoreTest error');
 
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
       todos = todoFilterStore.filterTodos.data();
@@ -174,7 +174,7 @@ describe('测试 TODO: <TodoIndex />', () => {
       completes ++;
       result.pop();
 
-      expect(todoList.find('ul').text()).not.toBe('todos!==todos2');
+      expect(todoList.find('ul').text()).not.toBe('customPropsMapping|Updaters|TodoFilterStoreTest error');
 
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
       todos = todoFilterStore.filterTodos.data();
@@ -208,7 +208,7 @@ describe('测试 TODO: <TodoIndex />', () => {
       completes ++;
       result.pop();
 
-      expect(todoList.find('ul').text()).not.toBe('todos!==todos2');
+      expect(todoList.find('ul').text()).not.toBe('customPropsMapping|Updaters|TodoFilterStoreTest error');
 
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
       todos = todoFilterStore.filterTodos.data();
@@ -230,7 +230,7 @@ describe('测试 TODO: <TodoIndex />', () => {
         expect(cacheOperates.length).toBe(0);
       });
 
-      expect(todoList.find('ul').text()).not.toBe('todos!==todos2');
+      expect(todoList.find('ul').text()).not.toBe('customPropsMapping|Updaters|TodoFilterStoreTest error');
 
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
       todos = todoFilterStore.filterTodos.data();

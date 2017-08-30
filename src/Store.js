@@ -21,7 +21,7 @@ Object.freeze(emptyObject);
  * @param {Array | Object} mergeValue 被合并的值
  * @return {Array | Object}
  * */
-function assign(target, propName, mergeValue, className, methodName) {
+function assign(target, propName, mergeValue) {
   let curValue = target[propName], nextValue;
   //数组类型值只可替换为新数组,所以数据类型不能转化
   if(isArray(curValue)){
@@ -68,7 +68,8 @@ class Store {
     for(let i = 0; i < arguments.length; i++){
       arguments[i](Store);
     }
-  }
+  };
+
   constructor(options){
     this.state = {};
     this.options = options;
@@ -76,15 +77,21 @@ class Store {
     initProperties(this, options && options.id);
   }
 
-  initState(inits){
+  /*
+  * 初始化state
+  * */
+  initState(data){
     let state = this.state;
-    for(let name in inits){
-      if (inits.hasOwnProperty(name)){
-        state[name] = inits[name];
+    for(let name in data){
+      if (data.hasOwnProperty(name)){
+        state[name] = data[name];
       }
     }
   }
 
+  /*
+   * 获取state
+   * */
   getState(){
     let clone = {},
         state = this.state;

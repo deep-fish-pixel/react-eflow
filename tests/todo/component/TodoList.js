@@ -6,6 +6,7 @@ import {wrapComponent} from '../../../src/eflow';
 import todoFilterStore, {todoFilterStoreTest} from '../store/TodoFilterStore';
 import TodoItem from './TodoItem';
 import shallowequal from 'shallowequal';
+import {isNumber} from '../../../src/types';
 
 class TodoList extends Component {
   constructor(props){
@@ -16,7 +17,9 @@ class TodoList extends Component {
 
   render(){
     let todos = this.props.todos,
-      todos2 = this.props.todos2;
+      todos2 = this.props.todos2,
+      itemLength = this.props.itemLength,
+      itemLength2 = this.props.itemLength2;
     let todoViews = todos && todos.map(function (todo) {
       return (
         <TodoItem key={todo.id} todo={todo}/>
@@ -24,7 +27,11 @@ class TodoList extends Component {
     });
     return (
       <ul>
-        {shallowequal(todos2, todos) ? todoViews : 'todos!==todos2'}
+        {todos && todos2 && shallowequal(todos2, todos)
+          && isNumber(itemLength) && isNumber(itemLength2)
+          && itemLength === itemLength2
+          ? todoViews : 'customPropsMapping|Updaters|TodoFilterStoreTest error'
+        }
       </ul>
     );
   }
