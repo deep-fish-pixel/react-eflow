@@ -1,4 +1,7 @@
-
+/*
+ * author: mawei
+ * 类型相关处理
+ * */
 export function isFunction(method) {
   return typeof method === 'function';
 }

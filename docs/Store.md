@@ -14,12 +14,12 @@ this.initState({
     });
 ``` 
 
-#### 3. 实例化Store，同一类型的Store需要多次实例化。第一个实例化推荐使用无id配置，第二个实例化，需要提供不同的id配置。
-
+#### 3. 同一类型的Store可以多次实例化,内部根据类名称自动生成id,方便调试不同Store对象, 如需定制, 需提供id配置。
 
 ```
-new TodoStore()
-new TodoStore({id: 'xxx'})
+new TodoStore() //{id: 'todoStore_1'}
+new TodoStore() //{id: 'todoStore_2'}
+new TodoStore({id: 'myTodoStore'}) //{id: 'myTodoStore'}
 ```
 
 #### 4. 通过this.method.data()获取相关数据, 参数类型是store对应的方法，尽量不要使用store.state或store.getState()获取数据

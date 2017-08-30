@@ -1,6 +1,7 @@
-/**
- * Created by mawei on 17/8/11.
- */
+/*
+ * author: mawei
+ * 包装用户组件,绑定store后能自动更新数据
+ * */
 import React, {Component} from 'react';
 import invariant from 'invariant';
 import shallowEqual from 'shallowequal';

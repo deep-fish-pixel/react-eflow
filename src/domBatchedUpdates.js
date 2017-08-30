@@ -1,5 +1,5 @@
 /**
- * Created by mawei on 17/8/11.
+ * author: mawei
  */
 export default function (Store) {
   /*let unstable_batchedUpdates = require('react-dom').unstable_batchedUpdates;

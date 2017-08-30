@@ -1,3 +1,7 @@
+/*
+ * author: mawei
+ * 原型相关处理
+ * */
 export function forEachPrototype(obj, callback) {
   var names = Object.getOwnPropertyNames(getPrototype(obj))
   names.forEach(function (name) {

@@ -1,3 +1,7 @@
+/*
+ * author: mawei
+ * eflow入口引用
+ * */
 import wrapComponent from './wrapComponent';
 import Store from './Store';
 

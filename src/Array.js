@@ -1,3 +1,7 @@
+/**
+ * author: mawei
+ * 判断数组类型
+ */
 import {isArray} from './types';
 /*
 * 把对应下标元素替换内容是数据,然后返回新数组

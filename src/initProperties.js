@@ -1,3 +1,7 @@
+/*
+ * author: mawei
+ * 添加Store实例的方法功能
+ * */
 import invariant from 'invariant';
 import {forEachPrototype} from './prototype';
 import {getMethodName} from './method';
@@ -27,7 +31,7 @@ export default function initProperties(obj, id) {
       * 当store有id标识时,所有原形方法转化为实例方法
       * 主要用于同一Store子类的实例
       * */
-      if(id){
+      if(method.displayName){
         let protoMethod = method;
         method = obj[methodName] = function () {
           return protoMethod.apply(this, Array.prototype.slice.apply(arguments));

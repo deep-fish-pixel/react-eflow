@@ -1,5 +1,5 @@
 /**
- * Created by mawei on 17/8/11.
+ * author: mawei
  */
 import shallowEqual from 'shallowequal';
 import invariant from 'invariant';
@@ -8,7 +8,6 @@ import initProperties from './initProperties';
 import {isArray, isObject} from './types';
 import {getMethodName, getOriginalMethodName} from './method';
 import pubSub from './pubSub';
-import domBatchedUpdates from './domBatchedUpdates';
 import DefaultObject from './DefaultObject';
 import UpdateQueue from './UpdateQueue';
 
@@ -60,6 +59,27 @@ function assign(target, propName, mergeValue) {
   }
   return nextValue;
 }
+
+let storeNames = {
+  names: {},
+  getName: function (store) {
+    if(store instanceof Store){
+      let name = getMethodName(store.constructor) || 'store',
+          names = this.names[name];
+      if(!names){
+        names = this.names[name] = [];
+      }
+      //首字母小写
+      name = name.replace(/\b\w+\b/g, function(word) {
+        return word.substring(0,1).toLowerCase() +  word.substring(1);
+      });
+      let storeName = name + '_' + (names.length + 1);
+      names.push(storeName);
+      return storeName;
+    }
+  }
+}
+
 /*
 * 商店基类,实现基本的状态管理
 * */
@@ -70,11 +90,12 @@ class Store {
     }
   };
 
-  constructor(options){
+  constructor(options = {}){
     this.state = {};
     this.options = options;
     this.updateQueue = new UpdateQueue();
-    initProperties(this, options && options.id);
+    this.id = options.id || storeNames.getName(this);
+    initProperties(this, this.id);
   }
 
   /*
@@ -216,9 +237,6 @@ class Store {
   }
 }
 
-//自动添加批处理功能
-if(typeof window === 'object' && window.document){
-  Store.plugin(domBatchedUpdates);
-}
+
 
 export default Store;

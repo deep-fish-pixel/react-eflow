@@ -1,4 +1,8 @@
 /*
+ * author: mawei
+ * 方法相关处理
+ * */
+/*
 * 获取方法名称
 * */
 export function getMethodName(method) {
