@@ -100,7 +100,6 @@ class TodoStore extends Store{
   }
 
   filterTodos(){
-    debugger
     let dispatch = this.filterTodos.dispatch,
       todos = this.data(this.todos),
       filter = this.data(this.filter);
