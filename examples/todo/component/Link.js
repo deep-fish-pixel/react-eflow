@@ -1,5 +1,5 @@
 import React from 'react';
-import filterStore from '../store/FilterStore';
+import todoStore from '../store/TodoStore';
 import {wrapComponent} from '../../../src/eflow';
 
 const Link = ({ active, children, onClick}) => {
@@ -21,12 +21,12 @@ const Link = ({ active, children, onClick}) => {
   )
 }
 
-export default wrapComponent(Link, [filterStore.filter], function (state, oldProps) {
+export default wrapComponent(Link, [todoStore.filter], function (state, oldProps) {
   return {
     //此时返回值值在组件Link的props中对应名称即为active和onClick
     active: state.filter === oldProps.filter,
     onClick: function () {
-      filterStore.filter(oldProps.filter);
+      todoStore.filter(oldProps.filter);
     }
   }
 });

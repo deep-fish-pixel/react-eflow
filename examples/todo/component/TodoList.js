@@ -3,7 +3,7 @@
  */
 import React, {Component} from 'react'
 import {wrapComponent} from '../../../src/eflow';
-import todoFilterStore from '../store/TodoFilterStore';
+import todoStore from '../store/TodoStore';
 import TodoItem from './TodoItem';
 
 class TodoList extends Component {
@@ -29,7 +29,7 @@ class TodoList extends Component {
   }
 }
 
-export default wrapComponent(TodoList, [todoFilterStore.filterTodos]);
+export default wrapComponent(TodoList, [todoStore.filterTodos]);
 
 /*export default wrapComponent(TodoList, [todoStore.todos, {
   //此时todoFilterStore.filterTodos对应的state值在组件TodoList的props中对应名称即为todos

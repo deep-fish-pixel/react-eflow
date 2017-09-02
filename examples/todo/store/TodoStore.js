@@ -4,8 +4,12 @@ class TodoStore extends Store{
   constructor(options){
     super(options);
     this.count = 0;
+    this.filterTodos.flowFrom(this.todos);
+    this.filterTodos.flowFrom(this.filter);
     this.initState({
-      todos: []
+      todos: [],
+      filterTodos: [],
+      filter: 'All'
     });
   }
 
@@ -75,6 +79,47 @@ class TodoStore extends Store{
       return todo.id !== id;
     });
     dispatch(todos);
+  }
+
+
+  showAll(){
+    this.filter('All');
+  }
+
+  showActive(){
+    this.filter('Active');
+  }
+
+  showCompleted(){
+    this.filter('Completed');
+  }
+
+  filter(filter){
+    var dispatch = this.filter.dispatch;
+    dispatch(filter);
+  }
+
+  filterTodos(){
+    debugger
+    let dispatch = this.filterTodos.dispatch,
+      todos = this.data(this.todos),
+      filter = this.data(this.filter);
+
+    let filterTodos = this.getTodos(todos, filter);
+    dispatch(filterTodos);
+  }
+
+  getTodos(todos, filter){
+    switch (filter) {
+      case 'All':
+        return todos;
+      case 'Completed':
+        return todos.filter(t => t.completed);
+      case 'Active':
+        return todos.filter(t => !t.completed);
+      default:
+        throw new Error('Unknown filter: ' + filter)
+    }
   }
 
 }

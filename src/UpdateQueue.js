@@ -43,9 +43,9 @@ class UpdateQueue{
     for(let name in queue){
       if(callback){
         update = queue[name];
+        delete queue[name];
         callback(name, update.nextValue, update.method);
       }
-      delete queue[name];
     }
   }
 

@@ -222,7 +222,13 @@ class Store {
     let key = method._eflowKey;
     process.env.NODE_ENV !== 'production'
     && invariant(key, '调用%s.pub 方法, 参数值%s 的_eflowKey为空, 该属性已在构造函数中进行初始化', getMethodName(this), getMethodName(method) || 'method');
-    pubSub.pub(key);
+    try{
+      pubSub.pub(key);
+    }catch(e) {
+      process.env.NODE_ENV !== 'production'
+      && console.log(e);
+    }
+
   }
   /*
   * 销毁处理

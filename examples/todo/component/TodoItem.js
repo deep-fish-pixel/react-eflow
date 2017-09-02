@@ -2,7 +2,7 @@
  * Created by mawei on 17/8/11.
  */
 import React, {Component} from 'react'
-import todoStore from '../store/TodoStore'
+import todoStore from '../store/TodoStore';
 
 class TodoItem extends Component {
   constructor(props){
