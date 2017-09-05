@@ -225,8 +225,9 @@ class Store {
     try{
       pubSub.pub(key);
     }catch(e) {
-      process.env.NODE_ENV !== 'production'
-      && console.log(e);
+      if(process.env.NODE_ENV !== 'production'){
+        throw e;
+      }
     }
 
   }

@@ -3,13 +3,12 @@
  */
 import React, {Component} from 'react'
 import {shallow, mount} from 'enzyme';
-import TodoIndex from './todoNest/component/TodoIndex';
-import TodoHeader from './todoNest/component/TodoHeader';
-import TodoList from './todoNest/component/TodoList';
-import todoStore from './todoNest/store/TodoStore';
-import todoFilterStore from './todoNest/store/TodoFilterStore';
+import TodoIndex from './todoDecorator/component/TodoIndex';
+import TodoHeader from './todoDecorator/component/TodoHeader';
+import TodoList from './todoDecorator/component/TodoList';
+import todoStore, {todoStore1, todoStore2, todoStore3} from './todoDecorator/store/TodoStore';
 
-describe('测试 TODO: <TodoIndex />', () => {
+describe('测试 TodoDecorator: <TodoIndex />', () => {
   const todoIndex = mount(
     <TodoIndex />
   );
@@ -26,7 +25,16 @@ describe('测试 TODO: <TodoIndex />', () => {
       todoHeader.node.simulateEnterDown(text);
     });
     let todoList = todoIndex.find('TodoList');
+    expect(todoList.find('ul').text()).not.toBe('customPropsMapping|Updaters|TodoFilterStoreTest error');
+
     expect(todoList.find('li').nodes).toHaveLength(todoNames.length);
+
+    let todoFooter = todoIndex.find('TodoFooter');
+    expect(todoFooter.find('span').at(0).text())
+      .toBe(todoNames.length > 1
+        ? todoNames.length + ' items'
+        : todoNames.length + ' item');
+
   });
   test('随机反转任务, 结果是否相同', () => {
     let todoList = todoIndex.find('TodoList');
@@ -42,7 +50,7 @@ describe('测试 TODO: <TodoIndex />', () => {
       }
     });
     let state = todoStore.getState(),
-        todos = state.todos.list,
+        todos = state.todos,
         completesCount = 0;
     todos.forEach(function (todo, index) {
       if(todo.completed === true && result[index] === true){
@@ -53,6 +61,12 @@ describe('测试 TODO: <TodoIndex />', () => {
     console.log('随机反转任务数:' + completes, '反转结果任务数:' + completesCount);
     expect(completesCount).toBe(completes);
 
+    let todoFooter = todoIndex.find('TodoFooter');
+    expect(todoFooter.find('span').at(0).text())
+      .toBe(todoNames.length > 1
+        ? todoNames.length + ' items'
+        : todoNames.length + ' item');
+
   });
   test('切换Active状态', () => {
     let todoFooter = todoIndex.find('TodoFooter'),
@@ -60,39 +74,58 @@ describe('测试 TODO: <TodoIndex />', () => {
     filterElement.simulate('click');
 
     let todoItems = todoIndex.find('TodoList').find('TodoItem');
-    let todos = todoFilterStore.filterTodos.data();
+    let todos = todoStore.filterTodos.data();
     console.log('当前Active任务数:' + todos.length);
 
     expect(todos.length).toBe(todoItems.nodes.length);
 
-
+    expect(todoFooter.find('span').at(0).text())
+      .toBe(todos.length > 1
+        ? todos.length + ' items'
+        : todos.length + ' item');
   });
   test('Active列表,完成第一个任务', () => {
-    let todos = todoFilterStore.filterTodos.data();
+    let todos = todoStore.filterTodos.data();
     let todoList = todoIndex.find('TodoList');
     if(todos.length){
       todoList.find('TodoItem').at(0).find('span').at(0).simulate('click');
       completes ++;
       result.pop();
 
+      expect(todoList.find('ul').text()).not.toBe('customPropsMapping|Updaters|TodoFilterStoreTest error');
+
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
-      todos = todoFilterStore.filterTodos.data();
+      todos = todoStore.filterTodos.data();
       console.log('完成第一个任务,Active任务数:' + todos.length);
       expect(todos.length).toBe(todoItems.nodes.length);
+
+      let todoFooter = todoIndex.find('TodoFooter');
+      expect(todoFooter.find('span').at(0).text())
+        .toBe(todos.length > 1
+          ? todos.length + ' items'
+          : todos.length + ' item');
     }
   });
   test('Active列表删除任务', () => {
-    let todos = todoFilterStore.filterTodos.data();
+    let todos = todoStore.filterTodos.data();
     let todoList = todoIndex.find('TodoList');
     if(todos.length){
       todoList.find('TodoItem').at(0).find('span').at(1).simulate('click');
       completes ++;
       result.pop();
 
+      expect(todoList.find('ul').text()).not.toBe('customPropsMapping|Updaters|TodoFilterStoreTest error');
+
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
-      todos = todoFilterStore.filterTodos.data();
+      todos = todoStore.filterTodos.data();
       console.log('删除1个任务,剩余Active任务数:' + todos.length);
       expect(todos.length).toBe(todoItems.nodes.length);
+
+      let todoFooter = todoIndex.find('TodoFooter');
+      expect(todoFooter.find('span').at(0).text())
+        .toBe(todos.length > 1
+          ? todos.length + ' items'
+          : todos.length + ' item');
     }
   });
   test('切换Complete状态', () => {
@@ -101,36 +134,57 @@ describe('测试 TODO: <TodoIndex />', () => {
     filterElement.simulate('click');
 
     let todoItems = todoIndex.find('TodoList').find('TodoItem');
-    let todos = todoFilterStore.filterTodos.data();
+    let todos = todoStore.filterTodos.data();
     console.log('当前Complete任务数:' + todos.length);
     expect(todos.length).toBe(todoItems.nodes.length);
+
+    expect(todoFooter.find('span').at(0).text())
+      .toBe(todos.length > 1
+        ? todos.length + ' items'
+        : todos.length + ' item');
   });
   test('Complete列表,完成第一个任务', () => {
-    let todos = todoFilterStore.filterTodos.data();
+    let todos = todoStore.filterTodos.data();
     let todoList = todoIndex.find('TodoList');
     if(todos.length){
       todoList.find('TodoItem').at(0).find('span').at(0).simulate('click');
       completes ++;
       result.pop();
 
+      expect(todoList.find('ul').text()).not.toBe('customPropsMapping|Updaters|TodoFilterStoreTest error');
+
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
-      todos = todoFilterStore.filterTodos.data();
+      todos = todoStore.filterTodos.data();
       console.log('完成第一个任务,Complete任务数:' + todos.length);
       expect(todos.length).toBe(todoItems.nodes.length);
+
+      let todoFooter = todoIndex.find('TodoFooter');
+      expect(todoFooter.find('span').at(0).text())
+        .toBe(todos.length > 1
+          ? todos.length + ' items'
+          : todos.length + ' item');
     }
   });
   test('Complete列表删除任务', () => {
-    let todos = todoFilterStore.filterTodos.data();
+    let todos = todoStore.filterTodos.data();
     let todoList = todoIndex.find('TodoList');
     if(todos.length){
       todoList.find('TodoItem').at(0).find('span').at(1).simulate('click');
       completes ++;
       result.pop();
 
+      expect(todoList.find('ul').text()).not.toBe('customPropsMapping|Updaters|TodoFilterStoreTest error');
+
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
-      todos = todoFilterStore.filterTodos.data();
+      todos = todoStore.filterTodos.data();
       console.log('删除1个任务,剩余Complete任务数:' + todos.length);
       expect(todos.length).toBe(todoItems.nodes.length);
+
+      let todoFooter = todoIndex.find('TodoFooter');
+      expect(todoFooter.find('span').at(0).text())
+        .toBe(todos.length > 1
+          ? todos.length + ' items'
+          : todos.length + ' item');
     }
   });
 
@@ -140,21 +194,23 @@ describe('测试 TODO: <TodoIndex />', () => {
     filterElement.simulate('click');
 
     let todoItems = todoIndex.find('TodoList').find('TodoItem');
-    let todos = todoFilterStore.filterTodos.data();
+    let todos = todoStore.filterTodos.data();
     console.log('All任务数:' + todos.length);
     expect(todos.length).toBe(todoItems.nodes.length);
   });
 
   test('All列表删除任务', () => {
-    let todos = todoFilterStore.filterTodos.data();
+    let todos = todoStore.filterTodos.data();
     let todoList = todoIndex.find('TodoList');
     if(todos.length){
       todoList.find('TodoItem').at(0).find('span').at(1).simulate('click');
       completes ++;
       result.pop();
 
+      expect(todoList.find('ul').text()).not.toBe('customPropsMapping|Updaters|TodoFilterStoreTest error');
+
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
-      todos = todoFilterStore.filterTodos.data();
+      todos = todoStore.filterTodos.data();
       console.log('删除1个任务,剩余任务数:' + todos.length);
       expect(todos.length).toBe(todoItems.nodes.length);
     }
@@ -173,11 +229,39 @@ describe('测试 TODO: <TodoIndex />', () => {
         expect(cacheOperates.length).toBe(0);
       });
 
+      expect(todoList.find('ul').text()).not.toBe('customPropsMapping|Updaters|TodoFilterStoreTest error');
+
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
-      todos = todoFilterStore.filterTodos.data();
+      todos = todoStore.filterTodos.data();
       console.log(`删除${length - Math.floor(length/2)}个任务,剩余任务数:` + todos.length);
       expect(length - Math.floor(length/2)).toBe(todoItems.nodes.length);
     }
   });
+
+  test('新建多个todoStore保存多次数据,判断是否单独存储问题', () => {
+    todoStore1.todos({
+      text: 'todo1',
+      id: 1
+    });
+
+    todoStore2.todos({
+      text: 'todo1',
+      id: 2
+    });
+
+    todoStore3.todos({
+      text: 'todo1',
+      id: 3
+    });
+
+    expect(todoStore1.todos.data().length).toBe(1);
+    expect(todoStore2.todos.data().length).toBe(1);
+    expect(todoStore3.todos.data().length).toBe(1);
+
+    console.log(todoStore1.todos.data()[0].id);
+    expect(todoStore1.todos.data()[0].id == 1).toBeTruthy();
+    expect(todoStore2.todos.data()[0].id == 2).toBeTruthy();
+    expect(todoStore3.todos.data()[0].id == 3).toBeTruthy();
+  })
 });
 

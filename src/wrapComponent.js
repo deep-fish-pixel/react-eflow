@@ -102,7 +102,7 @@ let wrapComponent = function(_Component, updaters, customPropsMapping){
             : originUpdater.propsKey
           || getOriginalMethodName(updater);
           _eflowKey = updater._eflowKey;
-          store = updater.ref;
+          store = updater.owner;
           let update = getState.bind(this, store, propsKey, updater, customPropsMapping);
           event[_eflowKey] = function callUpdate() {
             update(true);
@@ -136,7 +136,7 @@ let wrapComponent = function(_Component, updaters, customPropsMapping){
       var curProps = {}, props = this.props;
       for(var propName in props){
         if(propName === 'innerRef' && props.innerRef){
-          curProps.ref = props.innerRef;
+          curProps.owner = props.innerRef;
         }
         else{
           curProps[propName] = props[propName];

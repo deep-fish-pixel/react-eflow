@@ -1,6 +1,7 @@
 {
   "plugins": [
-    ["babel-plugin-transform-class-properties"],
+    ["transform-decorators-legacy"],
+    ["transform-class-properties"],
     ["transform-es2015-template-literals", { "loose": true }],
     "transform-es2015-literals",
     "transform-es2015-function-name",

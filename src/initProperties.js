@@ -51,7 +51,7 @@ export default function initProperties(obj, id) {
         ),
         dispatch: obj.bind(method),
         data: obj.data.bind(obj, method),
-        ref: obj,
+        owner: obj,
         flows: {},
         //指定该方法跟随source方法同步更新
         flowFrom: function (source) {
@@ -60,16 +60,16 @@ export default function initProperties(obj, id) {
           && invariant(
             _eflowKey,
             '%s.%s 方法, _eflowKey值为空',
-            getMethodName(source.ref.constructor),
+            getMethodName(source.owner.constructor),
             getMethodName(source) || 'method'
           );
           process.env.NODE_ENV !== 'production'
           && invariant(
             !this.flows[_eflowKey],
             '%s.%s 已同步 %s.%s',
-            getMethodName(this.ref.constructor),
+            getMethodName(this.owner.constructor),
             getMethodName(this) || 'method',
-            getMethodName(source.ref.constructor),
+            getMethodName(source.owner.constructor),
             getMethodName(source) || 'method'
           );
           this.flows[_eflowKey] = function sync() {
@@ -84,7 +84,7 @@ export default function initProperties(obj, id) {
           }
           Object.assign(method, {
             _eflowKey: null,
-            ref: null,
+            owner: null,
             flows: null,
             flowFrom: null,
             destory: null
