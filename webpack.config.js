@@ -1,5 +1,5 @@
 module.exports = {
-  entry: './examples/todo/index.js',
+  entry: './index.js',
 
   output: {
     filename: 'bundle.js',
@@ -8,7 +8,7 @@ module.exports = {
 
   module: {
     loaders: [
-      { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader?presets[]=es2015&presets[]=react&presets[]=stage-0' }
+      { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' }
     ]
   }
 }
