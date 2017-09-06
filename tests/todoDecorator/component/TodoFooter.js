@@ -6,6 +6,13 @@ import Link from './Link';
 import {wrapComponent} from '../../../src/eflow';
 import todoStore from '../store/TodoStore';
 
+function customPropsMapping(state, oldProps) {
+  return {
+    itemLength: state.filterTodos.length
+  }
+}
+
+@wrapComponent([todoStore.filterTodos], customPropsMapping)
 class TodoFooter extends Component {
   constructor(props){
     super(props);
@@ -37,10 +44,4 @@ class TodoFooter extends Component {
   }
 }
 
-export default wrapComponent(TodoFooter, [todoStore.filterTodos],
-  function (state, oldProps) {
-    return {
-      itemLength: state.filterTodos.length
-    }
-  }
-);
+export default TodoFooter;

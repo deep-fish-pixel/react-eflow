@@ -6,6 +6,7 @@ import {wrapComponent} from '../../../src/eflow';
 import todoStore from '../store/TodoStore';
 import TodoItem from './TodoItem';
 
+@wrapComponent([todoStore.filterTodos])
 class TodoList extends Component {
   constructor(props){
     super(props);
@@ -28,7 +29,7 @@ class TodoList extends Component {
   }
 }
 
-export default wrapComponent(TodoList, [todoStore.filterTodos]);
+export default TodoList;
 
 /*export default wrapComponent(TodoList, [todoStore.todos, {
   //此时todoFilterStore.filterTodos对应的state值在组件TodoList的props中对应名称即为todos

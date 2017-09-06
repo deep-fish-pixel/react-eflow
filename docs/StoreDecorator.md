@@ -1,4 +1,4 @@
-## Store使用装饰注入相关参数
+## Store使用装饰器注入相关参数
  
 #### 1. 使用装饰器dispatch, 默认注入该方法的dispatch
 

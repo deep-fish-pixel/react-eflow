@@ -21,7 +21,7 @@ const Link = ({ active, children, onClick}) => {
   )
 }
 
-export default wrapComponent(Link, [todoStore.filter], function (state, oldProps) {
+function customPropsMapping(state, oldProps) {
   return {
     //此时返回值值在组件Link的props中对应名称即为active和onClick
     active: state.filter === oldProps.filter,
@@ -29,4 +29,7 @@ export default wrapComponent(Link, [todoStore.filter], function (state, oldProps
       todoStore.filter(oldProps.filter);
     }
   }
-});
+}
+
+
+export default wrapComponent(Link, [todoStore.filter], customPropsMapping);
