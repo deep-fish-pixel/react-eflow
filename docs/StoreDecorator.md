@@ -40,6 +40,9 @@
 #### 5. param装饰器实现 既包含本方法的dispatch, 又包含其他方法的dispatch或数据等
 
 ```
-  @param(param.dispatch, 'filter.data', 'todos.data')
-  filterTodos(dispatch, filter, todos)
+  @param(param.dispatch, 'todos.data', 'filter.data')
+  filterTodos(dispatch, todos, filter){
+    let filterTodos = this.getTodos(todos, filter);
+    dispatch(filterTodos);
+  }
 ```

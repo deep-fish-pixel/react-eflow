@@ -87,8 +87,8 @@ class TodoStore extends Store{
     dispatch(filter);
   }
 
-  @param(param.dispatch, 'filter.data', 'todos.data')
-  filterTodos(dispatch, filter, todos){
+  @param(param.dispatch, 'todos.data', 'filter.data')
+  filterTodos(dispatch, todos, filter){
     let filterTodos = this.getTodos(todos, filter);
     dispatch(filterTodos);
   }
