@@ -40,6 +40,6 @@
 #### 5. param装饰器实现 既包含本方法的dispatch, 又包含其他方法的dispatch或数据等
 
 ```
-  @param('dispatch', 'filter.data', 'todos.data')
+  @param(param.dispatch, 'filter.data', 'todos.data')
   filterTodos(dispatch, filter, todos)
 ```
