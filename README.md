@@ -84,8 +84,8 @@ export default wrapComponent(SomeComponent, [someStore.doSomeThing]);
 #### [Api介绍](./docs/Api.md)
 #### [Store使用介绍](./docs/Store.md)
 #### [wrapComponent使用介绍](./docs/wrapComponent.md)
-#### [Store使用装饰注入参数](./docs/StoreDecorator.md)
-#### [wrapComponent使用装饰](./docs/wrapComponent.md)
+#### [Store装饰使用说明](./docs/StoreDecorator.md)
+#### [wrapComponent装饰使用说明](./docs/wrapComponentDecorator.md)
 
 
 
