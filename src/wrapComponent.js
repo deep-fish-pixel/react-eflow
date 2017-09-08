@@ -113,9 +113,9 @@ let wrapComponent = function(_Component, updaters, customPropsMapping){
             originUpdater = updater;
             updater = isMethod ? updater : updater.updater;
             propsKey = isMethod
-              ? getOriginalMethodName(updater)
+              ? updater.stateKey
               : originUpdater.propsKey
-            || getOriginalMethodName(updater);
+            || updater.stateKey;
             _eflowKey = updater._eflowKey;
             store = updater.owner;
             let update = getState.bind(this, store, propsKey, updater, customPropsMapping);

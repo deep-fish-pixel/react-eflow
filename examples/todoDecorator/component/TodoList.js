@@ -15,7 +15,7 @@ class TodoList extends Component {
   }
 
   render(){
-    let filterTodos = this.props.filterTodos;
+    let filterTodos = this.props.aliasFilterTodos;
     let todoViews = filterTodos && filterTodos.map(function (todo) {
       return (
         <TodoItem key={todo.id} todo={todo}/>

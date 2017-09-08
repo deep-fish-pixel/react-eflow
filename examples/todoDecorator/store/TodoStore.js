@@ -1,15 +1,19 @@
-import {Store, dispatch, data, param} from '../../../src/eflow';
+import {Store, dispatch, data, param, stateKey, flowFrom} from '../../../src/eflow';
 
 class TodoStore extends Store{
+  /*static StateKeys = {
+    setFilter: 'filterName',
+    todos: 'aliasTodos',
+    filterTodos: 'aliasFilterTodos',
+  };*/
+
   constructor(options){
     super(options);
     this.count = 0;
-    this.filterTodos.flowFrom(this.todos);
-    this.filterTodos.flowFrom(this.filter);
     this.initState({
-      todos: [],
-      filterTodos: [],
-      filter: 'All'
+      aliasTodos: [],
+      aliasFilterTodos: [],
+      filterName: 'All'
     });
   }
 
@@ -25,6 +29,7 @@ class TodoStore extends Store{
     }, 1000);
   }
 
+  @stateKey('aliasTodos')
   @param(param.dispatch, param.data)
   todos(dispatch, data, todo){
     data.push(todo);
@@ -70,24 +75,15 @@ class TodoStore extends Store{
     dispatch(todos);
   }
 
-  showAll(){
-    this.filter('All');
-  }
-
-  showActive(){
-    this.filter('Active');
-  }
-
-  showCompleted(){
-    this.filter('Completed');
-  }
-
   @dispatch
-  filter(dispatch, filter){
+  @stateKey('filterName')
+  setFilter(dispatch, filter){
     dispatch(filter);
   }
 
-  @param(param.dispatch, 'todos.data', 'filter.data')
+  @flowFrom('todos', 'setFilter')
+  @stateKey('aliasFilterTodos')
+  @param(param.dispatch, 'todos.data', 'setFilter.data')
   filterTodos(dispatch, todos, filter){
     let filterTodos = this.getTodos(todos, filter);
     dispatch(filterTodos);

@@ -132,13 +132,13 @@ class Store {
   dispatch(method, value){
     if(method){
       let state = this.state,
-        name = getOriginalMethodName(method);
+        stateKey = method.stateKey;
 
       process.env.NODE_ENV !== 'production'
-      && invariant(name, '调用%s.data 方法, 参数值%s 的name或displayName为空, displayName属性在构造函数中进行初始化', getMethodName(this), name || 'method');
-      this.change(state, name, value, method);
+      && invariant(stateKey, '调用%s.dispatch 方法, 参数值%s 的stateKey为空, stateKey属性在构造函数中进行初始化, 应该是非原型方法', getMethodName(this), name || 'method');
+      this.change(state, stateKey, value, method);
     }
-    this.updateQueue.exec((name, nextValue, method)=>{
+    this.updateQueue.exec((stateKey, nextValue, method)=>{
       this.pub(method);
     });
   }
@@ -146,11 +146,11 @@ class Store {
   /*
   * 检查value是否有变更,若果有就加入队列
   * */
-  change(state, name, value, method) {
-    let curValue = state[name],
+  change(state, stateKey, value, method) {
+    let curValue = state[stateKey],
       nextValue,
       shouldUpdate;
-    nextValue = assign(state, name, value);
+    nextValue = assign(state, stateKey, value);
 
     //如果value是对象,进行深度检测
     if (isObject(value)) {
@@ -170,7 +170,7 @@ class Store {
 
     if (shouldUpdate || !shallowEqual(curValue, nextValue)) {
       this.updateQueue.push(method, curValue, nextValue);
-      state[name] = nextValue;
+      state[stateKey] = nextValue;
     }
   }
   /*
@@ -191,15 +191,15 @@ class Store {
    * @return {Array | Object}
    * */
   data(method, value){
-    let name = getOriginalMethodName(method);
+    let stateKey = method.stateKey;
     process.env.NODE_ENV !== 'production'
-    && invariant(name, '调用%s.data 方法, 参数值%s 的name或displayName为空, displayName属性已在构造函数中进行初始化', getMethodName(this), getMethodName(method) || 'method');
+    && invariant(stateKey, '调用%s.data 方法, 参数值%s 的stateKey为空, stateKey属性在构造函数中进行初始化, 应该是非原型方法', getMethodName(this), name || 'method');
     if(arguments.length >= 2){
-      this.change(this.state, name, value, method)
+      this.change(this.state, stateKey, value, method)
     }
     else {
       let state = this.state,
-        curValue = state[name],
+        curValue = state[stateKey],
         newValue;
       if(isObject(curValue) && !isArray(curValue)){
         newValue =  {};
@@ -210,7 +210,7 @@ class Store {
         }
         return newValue;
       }
-      return assign(this.state, name);
+      return assign(this.state, stateKey);
     }
   }
 

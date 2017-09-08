@@ -7,6 +7,8 @@ import Store from './Store';
 import dispatch from './decorators/dispatchDecorator';
 import data from './decorators/dataDecorator';
 import param from './decorators/paramDecorator';
+import stateKey from './decorators/stateKeyDecorator';
+import flowFrom from './decorators/flowFromDecorator';
 
 export {
   //包装组件,管理组件的更新
@@ -18,5 +20,9 @@ export {
   //data装饰器
   data,
   //params装饰器
-  param
+  param,
+  //stateKey装饰器
+  stateKey,
+  //flowFrom装饰器
+  flowFrom
 }

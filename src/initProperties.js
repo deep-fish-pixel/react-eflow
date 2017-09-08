@@ -6,6 +6,7 @@ import invariant from 'invariant';
 import {forEachPrototype} from './prototype';
 import {getMethodName} from './method';
 import pubSub from './pubSub';
+import {isString, isFunction} from './types';
 
 let methodCount = 0;
 
@@ -25,6 +26,9 @@ export function createUniqueMethodKey(...args) {
 * 初始化store,为store的每个方法添加key及回调
 * */
 export default function initProperties(obj, id) {
+  const stateKeys = obj.constructor.StateKeys || {};
+  const flowFroms = obj.constructor.FlowFroms || {};
+
   forEachPrototype(obj, function (method, methodName) {
     if(methodName !== 'constructor'){
       /*
@@ -49,6 +53,7 @@ export default function initProperties(obj, id) {
           methodName || 'method',
           id
         ),
+        stateKey: stateKeys[methodName] || methodName,
         dispatch: obj.bind(method),
         data: obj.data.bind(obj, method),
         owner: obj,
@@ -72,7 +77,7 @@ export default function initProperties(obj, id) {
             getMethodName(source.owner.constructor),
             getMethodName(source) || 'method'
           );
-          this.flows[_eflowKey] = function sync() {
+          this.flows[_eflowKey] = function flow() {
             obj[methodName]();
           };
           pubSub.sub(_eflowKey, this.flows[_eflowKey]);
@@ -92,8 +97,45 @@ export default function initProperties(obj, id) {
         }
       };
       Object.assign(method, extend);
+      //初始化各个方法的flowFrom
+      initFlowFroms(obj, method, flowFroms[methodName]);
     }
   });
+}
+
+function initFlowFroms(store, method, methodFlowFroms) {
+  if(!methodFlowFroms){
+    return;
+  }
+  methodFlowFroms.forEach(function (flowFrom) {
+    const targetClassName = getMethodName(store.constructor);
+    if(isString(flowFrom)){
+      process.env.NODE_ENV !== 'production'
+      && invariant(
+        store[flowFrom],
+        '%s.%s的装饰器 %s 存在错误: 绑定的%s.%s方法不存在, 该类原型上没有%s方法',
+        targetClassName,
+        getMethodName(method),
+        methodFlowFroms.decoratorName,
+        targetClassName,
+        flowFrom,
+        flowFrom
+      );
+      method.flowFrom(store[flowFrom]);
+    }
+    else if(isFunction(flowFrom)){
+      process.env.NODE_ENV !== 'production'
+      && invariant(
+        flowFrom.owner,
+        '%s.%s的装饰器 %s 存在错误: 绑定的对象.%s方法不存在, 该方法可能被覆盖',
+        targetClassName,
+        getMethodName(method),
+        methodFlowFroms.decoratorName,
+        getMethodName(method)
+      );
+      method.flowFrom(flowFrom);
+    }
+  })
 }
 
 

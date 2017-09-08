@@ -8,7 +8,7 @@ import todoStore from '../store/TodoStore';
 
 function customPropsMapping(state, oldProps) {
   return {
-    itemLength: state.filterTodos.length
+    itemLength: state.aliasFilterTodos.length
   }
 }
 
@@ -29,15 +29,15 @@ class TodoFooter extends Component {
         </span>
         Show:&nbsp;
         <Link
-          filter="All">
+          filterName="All">
           All
         </Link>,&nbsp;
         <Link
-          filter="Active">
+          filterName="Active">
           Active
         </Link>,&nbsp;
         <Link
-          filter="Completed">
+          filterName="Completed">
           Complete
         </Link>
       </div>

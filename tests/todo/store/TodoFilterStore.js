@@ -1,4 +1,4 @@
-import {Store} from '../../../src/eflow';
+import {Store, flowFrom} from '../../../src/eflow';
 import todoStore from './TodoStore'
 import filterStore from './FilterStore'
 
@@ -8,11 +8,9 @@ class TodoFilterStore extends Store{
     this.initState({
       filterTodos: []
     });
-    this.filterTodos.flowFrom(todoStore.todos);
-    this.filterTodos.flowFrom(filterStore.filter);
   }
 
-
+  @flowFrom(todoStore.todos, filterStore.filter)
   filterTodos(){
     let dispatch = this.filterTodos.dispatch,
       todos = todoStore.data(todoStore.todos),

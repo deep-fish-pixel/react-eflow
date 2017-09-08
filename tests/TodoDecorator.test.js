@@ -50,7 +50,7 @@ describe('测试 TodoDecorator: <TodoIndex />', () => {
       }
     });
     let state = todoStore.getState(),
-        todos = state.todos,
+        todos = state.aliasTodos,
         completesCount = 0;
     todos.forEach(function (todo, index) {
       if(todo.completed === true && result[index] === true){
