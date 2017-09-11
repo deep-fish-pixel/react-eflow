@@ -22,25 +22,44 @@ new TodoStore() //{id: 'todoStore_2'}
 new TodoStore({id: 'myTodoStore'}) //{id: 'myTodoStore'}
 ```
 
-#### 4. 通过this.method.data()获取相关数据, 参数类型是store对应的方法，尽量不要使用store.state或store.getState()获取数据
+#### 4. Store实例的每个方法在构造时进行绑定处理, 可以单独使用。
+
+```
+todoStore.addTodo(value);
+===
+const addTodo = todoStore.addTodo;
+addTodo(value);
+```
+
+
+#### 5. 通过this.method.data()获取相关数据, 参数类型是store对应的方法，尽量不要使用store.state或store.getState()获取数据
 
 ```
 todos = this.todos.data();
 ```
 
-#### 5. 需要保存数据并把该变化通知给相关组件，使用该方法的dispatch进行发布
+#### 6. 需要保存数据并把该变化通知给相关组件，使用该方法的dispatch进行发布
 
 ```
 this.todos.dispatch(todos);
 ```
 
-#### 6. 需要保存数据但不需要发布出去时，使用this.method.data保存,此方法必须传参,否则当成数据获取。
+#### 7. 同上相同功能的另外一种实现, 通过返回值即可实现本方法的dispatch, 另外通过dispatch.return装饰器指定其他方法dispatch发布
+
+```
+  addTodo(text){
+    return {request: false};
+  }
+```
+
+
+#### 8. 需要保存数据但不需要发布出去时，使用this.method.data保存,此方法必须传参,否则当成数据获取。
 
 ```
 this.todos.data(todos)
 ```
 
-#### 7. 在Store中一个方法可调用另一个方法，但数据更新通知发出最终看哪些方法调用了dispatch
+#### 9. 在Store中一个方法可调用另一个方法，但数据更新通知发出最终看哪些方法调用了dispatch
 
 ```
 editTodo(_todo){
@@ -57,7 +76,7 @@ editTodo(_todo){
   }
 ```
 
-#### 8. 注意数组的元素或对象的属性是对象（嵌套对象）,且属性值发生改变,需替换该对象。在原对象中修改不会有数据更新
+#### 10. 注意数组的元素或对象的属性是对象（嵌套对象）,且属性值发生改变,需替换该对象。在原对象中修改不会有数据更新
 
 ```
 todos.some(function(todo, index){
@@ -69,7 +88,7 @@ todos.some(function(todo, index){
     })
 ```
 
-#### 9. 对于未初始化的数据,默认会获取一个DefaultObject实例,使用dispatch后该对象可被扩展,也可覆盖成其他任意类型.
+#### 11. 对于未初始化的数据,默认会获取一个DefaultObject实例,使用dispatch后该对象可被扩展,也可覆盖成其他任意类型.
 
 ```
 let someobj = this.some.data();//someobj类型为DefaultObject
@@ -83,7 +102,7 @@ this.some.data({});
 someobj = this.some.data();//someobj类型为对象
 ```
 
-#### 10. this.method.dispatch可直接保存数据类型: 基本数据类型,字符串,对象,数组,其他类型.
+#### 12. this.method.dispatch可直接保存数据类型: 基本数据类型,字符串,对象,数组,其他类型.
 对于已覆盖或初始化后的数据类型, dipatch不同数据类型，规则如下:
 
 | 当前数据类型 | 未初始化的数据类型 | 可扩展 | 可覆盖 | 数据类型可变化 |
@@ -95,7 +114,7 @@ someobj = this.some.data();//someobj类型为对象
 | 布尔 | DefaultObject | 否 | 是 | 是 |
 | 其他类型 | DefaultObject | 否 | 是 | 是 |
 
-#### 11. 保存业务数据, 推荐使用动作数据方法跟存储数据方法分离.动作方法调用存储方法完成数据更新.
+#### 13. 保存业务数据, 推荐使用动作数据方法跟存储数据方法分离.动作方法调用存储方法完成数据更新.
 
 ```
 addTodo(todo){
@@ -119,7 +138,7 @@ todos(todo){
 }
 ```
 
-#### 12. 保存复杂的嵌套数据时,需要把数据扁平化处理.嵌套对象等于或超多2层时,检测不到该数据变化.
+#### 14. 保存复杂的嵌套数据时,需要把数据扁平化处理.嵌套对象等于或超多2层时,检测不到该数据变化.
 
 ```
 错误的写法:
@@ -136,7 +155,7 @@ this.notice.dispatch({
 ```
 
 
-#### 13. 可以对Store进行拆分，如果不同Store方法有关联处理，需要同步更新操作。需要constructor中进行flowFrom绑定，注意数据的上下游顺序
+#### 15. 可以对Store进行拆分，如果不同Store方法有关联处理，需要同步更新操作。需要constructor中进行flowFrom绑定，注意数据的上下游顺序
 
 ```
 class TodoFilterStore extends Store{
@@ -152,3 +171,15 @@ class TodoFilterStore extends Store{
   }
 }
 ```
+
+
+#### 16.通过Store子类指定StateKeys,可配置方法映射到state的key值。使用stateKey装饰器可实现相同功能
+
+```
+static StateKeys = {
+    setFilter: 'filterName',
+    todos: 'aliasTodos',
+    filterTodos: 'aliasFilterTodos',
+  }
+```
+

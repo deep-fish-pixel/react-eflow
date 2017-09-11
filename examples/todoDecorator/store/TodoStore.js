@@ -1,12 +1,6 @@
 import {Store, dispatch, data, param, stateKey, flowFrom} from '../../../src/eflow';
 
 class TodoStore extends Store{
-  /*static StateKeys = {
-    setFilter: 'filterName',
-    todos: 'aliasTodos',
-    filterTodos: 'aliasFilterTodos',
-  };*/
-
   constructor(options){
     super(options);
     this.count = 0;

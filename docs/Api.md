@@ -31,9 +31,9 @@
         
     ``` 
   
-4. bind(method)
+4. bindDispatch(method)
     
-    绑定方法参数,快捷写法
+    获取指定方法的dispatch,快捷写法
     
 5. data(method, value)
 
