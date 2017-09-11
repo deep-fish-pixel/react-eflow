@@ -8,6 +8,7 @@ import TodoHeader from './todoNest/component/TodoHeader';
 import TodoList from './todoNest/component/TodoList';
 import todoStore from './todoNest/store/TodoStore';
 import todoFilterStore from './todoNest/store/TodoFilterStore';
+import './preHandleEnv';
 
 describe('测试 TodoNest: <TodoIndex />', () => {
   const todoIndex = mount(

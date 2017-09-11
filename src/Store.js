@@ -135,7 +135,7 @@ class Store {
         stateKey = method.stateKey;
 
       process.env.NODE_ENV !== 'production'
-      && invariant(stateKey, '调用%s.dispatch 方法, 参数值%s 的stateKey为空, stateKey属性在构造函数中进行初始化, 应该是非原型方法', getMethodName(this), name || 'method');
+      && invariant(stateKey, '调用%s.dispatch 方法, 参数值%s 的stateKey为空, stateKey属性在构造函数中进行初始化, 应该是非原型方法', getMethodName(this), getMethodName(method) || 'method');
       this.change(state, stateKey, value, method);
     }
     this.updateQueue.exec((stateKey, nextValue, method)=>{
@@ -193,7 +193,7 @@ class Store {
   data(method, value){
     let stateKey = method.stateKey;
     process.env.NODE_ENV !== 'production'
-    && invariant(stateKey, '调用%s.data 方法, 参数值%s 的stateKey为空, stateKey属性在构造函数中进行初始化, 应该是非原型方法', getMethodName(this), name || 'method');
+    && invariant(stateKey, '调用%s.data 方法, 参数值%s 的stateKey为空, stateKey属性在构造函数中进行初始化, 应该是非原型方法', getMethodName(this), getMethodName(method) || 'method');
     if(arguments.length >= 2){
       this.change(this.state, stateKey, value, method)
     }

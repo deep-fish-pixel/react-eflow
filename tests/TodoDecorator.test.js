@@ -7,6 +7,8 @@ import TodoIndex from './todoDecorator/component/TodoIndex';
 import TodoHeader from './todoDecorator/component/TodoHeader';
 import TodoList from './todoDecorator/component/TodoList';
 import todoStore, {todoStore1, todoStore2, todoStore3} from './todoDecorator/store/TodoStore';
+import './preHandleEnv';
+
 
 describe('测试 TodoDecorator: <TodoIndex />', () => {
   const todoIndex = mount(
@@ -258,7 +260,6 @@ describe('测试 TodoDecorator: <TodoIndex />', () => {
     expect(todoStore2.todos.data().length).toBe(1);
     expect(todoStore3.todos.data().length).toBe(1);
 
-    console.log(todoStore1.todos.data()[0].id);
     expect(todoStore1.todos.data()[0].id == 1).toBeTruthy();
     expect(todoStore2.todos.data()[0].id == 2).toBeTruthy();
     expect(todoStore3.todos.data()[0].id == 3).toBeTruthy();
