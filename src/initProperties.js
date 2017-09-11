@@ -26,8 +26,9 @@ export function createUniqueMethodKey(...args) {
 * 初始化store,为store的每个方法添加key及回调
 * */
 export default function initProperties(obj, id) {
-  const stateKeys = obj.constructor.StateKeys || {};
-  const flowFroms = obj.constructor.FlowFroms || {};
+  let construtor = obj.constructor;
+  const stateKeys = construtor.StateKeys || {};
+  const flowFroms = construtor.FlowFroms || {};
 
   forEachPrototype(obj, function (method, methodName) {
     if(methodName !== 'constructor'){
@@ -35,26 +36,33 @@ export default function initProperties(obj, id) {
       * 当store有id标识时,所有原形方法转化为实例方法
       * 主要用于同一Store子类的实例
       * */
-      if(method.displayName){
-        let protoMethod = method;
-        method = obj[methodName] = function () {
-          return protoMethod.apply(this, Array.prototype.slice.apply(arguments));
+      if(!method.displayName){
+        let coreMethod = method;
+        method = construtor.prototype[methodName] = function innerMethod() {
+          let returnDispatchName =  coreMethod.returnDispatchName || methodName;
+          let returnValue = coreMethod.apply(this, Array.prototype.slice.apply(arguments));
+          if(returnValue !== undefined){
+            this[returnDispatchName].dispatch(returnValue);
+          }
+          return returnValue;
         };
-        method.displayName = getKeyByWords(id, methodName);
-      }
-      else{
         method.displayName = methodName;
       }
+      let innerMethod = construtor.prototype[methodName];
+      method = obj[methodName] = function wrapInnerMethod() {
+        return innerMethod.apply(obj, Array.prototype.slice.apply(arguments));
+      };
+      method.displayName = methodName;
 
       let extend = {
         //获取key名称
         _eflowKey: createUniqueMethodKey(
-          '_eflow_' + getMethodName(obj.constructor),
+          '_eflow_' + getMethodName(construtor),
           methodName || 'method',
           id
         ),
         stateKey: stateKeys[methodName] || methodName,
-        dispatch: obj.bind(method),
+        dispatch: obj.bindDispatch(method),
         data: obj.data.bind(obj, method),
         owner: obj,
         flows: {},

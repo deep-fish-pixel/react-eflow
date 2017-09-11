@@ -178,7 +178,7 @@ class Store {
    * @param {Function} method Store继承类的方法
    * @return {Function}
    * */
-  bind(method){
+  bindDispatch(method){
     let name = getOriginalMethodName(method);
     process.env.NODE_ENV !== 'production'
     && invariant(name, '调用%s.data 方法, 参数值%s 的name或displayName为空, displayName属性已在构造函数中进行初始化', getMethodName(this), name || 'method');

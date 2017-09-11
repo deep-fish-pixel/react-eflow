@@ -10,14 +10,11 @@ class TodoStore extends Store{
   }
 
   addTodo(text){
-    var dispatch = this.addTodo.dispatch;
-
-    dispatch({request: true});
-    dispatch({request: false});
     this.todos({
       text: text,
       id: ++ this.count
     });
+    return {request: false};
   }
 
   operateTodos(prevDispatchCallback, dispatchCallback){

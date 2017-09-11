@@ -12,23 +12,17 @@ class TodoStore extends Store{
   }
 
   addTodo(text){
-    var dispatch = this.addTodo.dispatch;
-
-    dispatch({request: true});
-    var self = this;
-    dispatch({request: false});
-    self.todos({
+    this.todos({
       text: text,
-      id: ++ self.count
+      id: ++ this.count
     });
+    return {request: true};
   }
 
   todos(todo){
-    let dispatch = this.todos.dispatch,
-        todos = this.todos.data();
-
+    let todos = this.todos.data();
     todos.list.push(todo);
-    dispatch(todos);
+    return (todos);
   }
 
   editTodo(_todo){

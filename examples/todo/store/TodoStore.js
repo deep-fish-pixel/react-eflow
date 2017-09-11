@@ -101,8 +101,8 @@ class TodoStore extends Store{
 
   filterTodos(){
     let dispatch = this.filterTodos.dispatch,
-      todos = this.data(this.todos),
-      filter = this.data(this.filter);
+      todos = this.todos.data(),
+      filter = this.filter.data();
 
     let filterTodos = this.getTodos(todos, filter);
     dispatch(filterTodos);

@@ -18,12 +18,13 @@ class TodoFilterStore extends Store{
       todos = todoStore.data(todoStore.todos),
       filter = filterStore.data(filterStore.filter);
 
-    let filterTodos = this.getTodos(todos.list, filter);
+    let filterTodos = getTodos(todos.list, filter);
     dispatch(filterTodos);
   }
+}
 
-  getTodos(todos, filter){
-    switch (filter) {
+function getTodos(todos, filter){
+  switch (filter) {
     case 'All':
       return todos;
     case 'Completed':
@@ -32,11 +33,7 @@ class TodoFilterStore extends Store{
       return todos.filter(t => !t.completed);
     default:
       throw new Error('Unknown filter: ' + filter)
-    }
   }
-
-
-
 }
 
 export default new TodoFilterStore();

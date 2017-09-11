@@ -5,6 +5,7 @@
 import invariant from 'invariant';
 import dispatchDecorator from './dispatchDecorator';
 import dataDecorator from './dataDecorator';
+import setDataDecorator from './setDataDecorator';
 import {getMethodName} from '../method';
 
 
@@ -29,9 +30,13 @@ const paramDecorator = function () {
           decoratorStack.push('data');
           decoratorStack.push(property);
           return dataDecorator(target, property, desc, onlyOne ? null : names[0], decoratorStack) || desc;
+        case 'setData':
+          decoratorStack.push('setData');
+          decoratorStack.push(property);
+          return setDataDecorator(target, property, desc, onlyOne ? null : names[0], decoratorStack) || desc;
         default:
           process.env.NODE_ENV !== 'production'
-          && invariant(false, '%s装饰器 %s 存在错误: %s没有%s方法, 方法应该是 dispatch 和 data 之一',
+          && invariant(false, '%s装饰器 %s 存在错误: %s没有%s方法, 应该是 dispatch、 data、setData 之一',
             getMethodName(target.constructor),
             decoratorStack[0],
             getMethodName(target.constructor || 'Store实例'),

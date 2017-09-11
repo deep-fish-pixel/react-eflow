@@ -19,7 +19,6 @@ class TodoStore extends Store{
 
   @dispatch
   addTodo(dispatch, text){
-    dispatch({request: true});
     setTimeout(() => {
       dispatch({request: false});
       this.todos({
@@ -27,13 +26,14 @@ class TodoStore extends Store{
         id: ++ this.count
       });
     }, 1000);
+    return {request: true};
   }
 
   @stateKey('aliasTodos')
-  @param(param.dispatch, param.data)
-  todos(dispatch, data, todo){
+  @param(param.data)
+  todos(data, todo){
     data.push(todo);
-    dispatch(data);
+    return data;
   }
 
   @param('todos.dispatch', 'todos.data')
@@ -47,8 +47,9 @@ class TodoStore extends Store{
     dispatch(todos);
   }
 
-  @param('todos.dispatch', 'todos.data')
-  toggleTodo(dispatch, todos, id){
+  @param('todos.data')
+  @dispatch.return('todos')
+  toggleTodo(todos, id){
     todos.some(function(todo, index){
       if(id == todo.id){
         //注意替换新值
@@ -56,7 +57,7 @@ class TodoStore extends Store{
         return true;
       }
     });
-    dispatch(todos);
+    return todos;
   }
 
   @param('todos.dispatch', 'todos.data')
@@ -85,23 +86,22 @@ class TodoStore extends Store{
   @stateKey('aliasFilterTodos')
   @param(param.dispatch, 'todos.data', 'setFilter.data')
   filterTodos(dispatch, todos, filter){
-    let filterTodos = this.getTodos(todos, filter);
+    let filterTodos = getTodos(todos, filter);
     dispatch(filterTodos);
   }
+}
 
-  getTodos(todos, filter){
-    switch (filter) {
-      case 'All':
-        return todos;
-      case 'Completed':
-        return todos.filter(t => t.completed);
-      case 'Active':
-        return todos.filter(t => !t.completed);
-      default:
-        throw new Error('Unknown filter: ' + filter)
-    }
+function getTodos(todos, filter){
+  switch (filter) {
+    case 'All':
+      return todos;
+    case 'Completed':
+      return todos.filter(t => t.completed);
+    case 'Active':
+      return todos.filter(t => !t.completed);
+    default:
+      throw new Error('Unknown filter: ' + filter)
   }
-
 }
 
 export default new TodoStore();

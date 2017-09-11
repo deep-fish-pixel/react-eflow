@@ -1,4 +1,4 @@
-import {Store, dispatch, data, param, stateKey, flowFrom} from '../../../src/eflow';
+import {Store, dispatch, data, setData, param, stateKey, flowFrom} from '../../../src/eflow';
 
 class TodoStore extends Store{
   /*static StateKeys = {
@@ -17,21 +17,42 @@ class TodoStore extends Store{
     });
   }
 
-  @dispatch
-  addTodo(dispatch, text){
-    dispatch({request: true});
+  addTodo(text){
     this.todos({
       text: text,
       id: ++ this.count
     });
-    dispatch({request: false});
+    return {request: false};
+  }
+
+  @param('addTodo.setData', 'todos.setData', 'todos.data')
+  operateTodos(setData, todosSetData, todos, prevDispatchCallback, dispatchCallback){
+    let dispatch = this.todos.dispatch,
+      length = todos.length;
+    setData({request: true});
+    setData({request: false});
+    setData({request: true});
+    for(var i = 0; i < length; i++){
+      if(i < length / 2){
+        todos[i] = {...todos[i], completed: !todos[i].completed};
+        todosSetData(todos);
+      }
+      else{
+        todos.pop();
+        todosSetData(todos);
+      }
+    }
+
+    prevDispatchCallback && prevDispatchCallback.call(this, this.updateQueue, todos);
+    dispatch(todos);
+    dispatchCallback && dispatchCallback.call(this, this.updateQueue, todos);
   }
 
   @stateKey('aliasTodos')
-  @param(param.dispatch, param.data)
-  todos(dispatch, data, todo){
+  @param(param.data)
+  todos(data, todo){
     data.push(todo);
-    dispatch(data);
+    return data;
   }
 
   @param('todos.dispatch', 'todos.data')
@@ -83,46 +104,22 @@ class TodoStore extends Store{
   @stateKey('aliasFilterTodos')
   @param(param.dispatch, 'todos.data', 'setFilter.data')
   filterTodos(dispatch, todos, filter){
-    let filterTodos = this.getTodos(todos, filter);
+    let filterTodos = getTodos(todos, filter);
     dispatch(filterTodos);
   }
+}
 
-  getTodos(todos, filter){
-    switch (filter) {
-      case 'All':
-        return todos;
-      case 'Completed':
-        return todos.filter(t => t.completed);
-      case 'Active':
-        return todos.filter(t => !t.completed);
-      default:
-        throw new Error('Unknown filter: ' + filter)
-    }
+function getTodos(todos, filter){
+  switch (filter) {
+    case 'All':
+      return todos;
+    case 'Completed':
+      return todos.filter(t => t.completed);
+    case 'Active':
+      return todos.filter(t => !t.completed);
+    default:
+      throw new Error('Unknown filter: ' + filter)
   }
-
-  operateTodos(prevDispatchCallback, dispatchCallback){
-    let dispatch = this.todos.dispatch,
-      data = this.todos.data,
-      todos = this.todos.data(),
-      length = todos.length;
-    this.addTodo.data({request: true});
-    this.addTodo.data({request: false});
-    this.addTodo.data({request: true});
-    for(var i = 0; i < length; i++){
-      if(i < length / 2){
-        todos[i] = {...todos[i], completed: !todos[i].completed};
-        data(todos);
-      }
-      else{
-        todos.pop();
-        data(todos);
-      }
-    }
-    prevDispatchCallback && prevDispatchCallback.call(this, this.updateQueue, todos);
-    dispatch(todos);
-    dispatchCallback && dispatchCallback.call(this, this.updateQueue, todos);
-  }
-
 }
 
 let todoStore1 = new TodoStore();
