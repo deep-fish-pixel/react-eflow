@@ -1,5 +1,5 @@
 module.exports = {
-  entry: './examples/todo/index.js',
+  entry: './tests/todoDecorator/index.js',
 
   output: {
     filename: 'bundle.js',
