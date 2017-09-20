@@ -11,7 +11,12 @@ export function isArray(array) {
 }
 
 export function isObject(obj) {
-  return typeof obj === 'object' && obj != null;
+  return typeof obj === 'object'
+    && obj != null
+    && (
+      (window.Map ? !(obj instanceof window.Map) : true)
+      && (window.Set ?  !(obj instanceof window.Set) : true)
+    );
 }
 
 export function isNumber(obj) {
@@ -20,4 +25,8 @@ export function isNumber(obj) {
 
 export function isString(obj) {
   return typeof obj === 'string';
+}
+
+export function isBoolean(obj) {
+  return typeof obj === 'boolean';
 }

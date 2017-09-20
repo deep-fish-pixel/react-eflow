@@ -1,12 +1,12 @@
 {
   "name": "react-eflow",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "eflow manage react data ",
   "main": "lib/eflow.js",
   "scripts": {
     "start": "webpack-dev-server --inline --content-base .",
     "build": "gulp build",
-    "test": "jest"
+    "test": "cross-env NODE_ENV=production jest"
   },
   "author": "maweimaweima",
   "license": "ISC",

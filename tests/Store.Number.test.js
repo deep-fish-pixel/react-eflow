@@ -1,6 +1,8 @@
 import Store from '../src/Store'
 import './preHandleEnv';
 
+
+
 class TestStore extends Store{
   constructor(options){
     super(options);

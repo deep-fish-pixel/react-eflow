@@ -5,7 +5,7 @@ import shallowEqual from 'shallowequal';
 import invariant from 'invariant';
 import {forEachPrototype} from './prototype';
 import initProperties from './initProperties';
-import {isArray, isObject} from './types';
+import {isArray, isObject, isString, isNumber, isBoolean, isFunction} from './types';
 import {getMethodName, getOriginalMethodName} from './method';
 import pubSub from './pubSub';
 import DefaultObject from './DefaultObject';
@@ -20,13 +20,19 @@ Object.freeze(emptyObject);
  * @param {Array | Object} mergeValue 被合并的值
  * @return {Array | Object}
  * */
-function assign(target, propName, mergeValue) {
+function assign(store, target, propName, mergeValue) {
   let curValue = target[propName], nextValue;
   //数组类型值只可替换为新数组,所以数据类型不能转化
   if(isArray(curValue)){
-    if(arguments.length >= 3 && isArray(mergeValue)){
-      nextValue = [...mergeValue];
+    if(arguments.length >= 4){
+      let array = isArray(mergeValue);
+      if(array){
+        nextValue = [...mergeValue];
+      }
+      mergeValue && process.env.NODE_ENV !== 'production'
+      && invariant(array, '%s实例的state, 其属性 %s 对应的值类型为数组,不可存非数组类型: %s', getMethodName(store.constructor), propName, mergeValue);
     }
+
     if(!nextValue){
       nextValue = [...curValue];
     }
@@ -34,11 +40,23 @@ function assign(target, propName, mergeValue) {
   //对象类型值不可覆盖只可扩展,所以数据类型不能转化
   else if(isObject(curValue)){
     mergeValue = mergeValue || emptyObject;
+
+    process.env.NODE_ENV !== 'production'
+    && invariant(
+      !isArray(mergeValue)
+      && !isString(mergeValue)
+      && !isNumber(mergeValue)
+      && !isBoolean(mergeValue)
+      && !isFunction(mergeValue)
+      && window.Map ? !(mergeValue instanceof window.Map) : true
+      && window.Set ?  !(mergeValue instanceof window.Set) : true,
+      '%s实例的state, 属性 %s 对应的值类型为对象,不可存非对象类型: %s', getMethodName(store.constructor), propName, mergeValue);
+
     nextValue = {...curValue, ...mergeValue};
   }
   else{
     //其他类型如基本类型,值可被覆盖但不可扩展,所以数据类型可以转化
-    if(arguments.length >= 3){
+    if(arguments.length >= 4){
       if(isArray(mergeValue)){
         nextValue = [...mergeValue];
       }
@@ -118,7 +136,7 @@ class Store {
         state = this.state;
     for(var name in state){
       if (state.hasOwnProperty(name)){
-        clone[name] = assign(state, name, state[name]);
+        clone[name] = assign(this, state, name, state[name]);
       }
     }
     return clone;
@@ -150,7 +168,7 @@ class Store {
     let curValue = state[stateKey],
       nextValue,
       shouldUpdate;
-    nextValue = assign(state, stateKey, value);
+    nextValue = assign(this, state, stateKey, value);
 
     //如果value是对象,进行深度检测
     if (isObject(value)) {
@@ -168,7 +186,11 @@ class Store {
       }
     }
 
-    if (shouldUpdate || !shallowEqual(curValue, nextValue)) {
+    if (shouldUpdate
+      || !shallowEqual(curValue, nextValue)
+      || (window.Map ? (nextValue instanceof window.Map) : false)
+      || (window.Set ? (nextValue instanceof window.Set) : false)
+    ) {
       this.updateQueue.push(method, curValue, nextValue);
       state[stateKey] = nextValue;
     }
@@ -205,12 +227,12 @@ class Store {
         newValue =  {};
         for(let propName in curValue){
           if (curValue.hasOwnProperty(propName)){
-            newValue[propName] = assign(curValue, propName);
+            newValue[propName] = assign(this, curValue, propName);
           }
         }
         return newValue;
       }
-      return assign(this.state, stateKey);
+      return assign(this, this.state, stateKey);
     }
   }
 
