@@ -12,3 +12,8 @@
 * 增加 装饰器stateKey 对Store的StateKeys静态属性支持[详见StoreDecorator第8条](./docs/StoreDecorator.md)
 * 增加 装饰器setData, 方便获取data方法
 * 增加 装饰器flowFrom
+
+
+## 1.0.17 (2017.09.20)
+
+**修改发布订阅顺序执行、增加Map和Set处理、增加类型转换报错提示
