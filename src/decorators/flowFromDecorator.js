@@ -19,7 +19,7 @@ const flowFromDecorator = function () {
       decoratorName
     );
 
-    let methodName = getMethodName(method),
+    let methodName = property || getMethodName(method),
       FlowFroms = target.constructor.FlowFroms,
       flows;
     if(!FlowFroms){

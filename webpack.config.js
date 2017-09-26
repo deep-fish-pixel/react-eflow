@@ -1,3 +1,5 @@
+var webpack = require("webpack");
+
 module.exports = {
   entry: './tests/todoDecorator/index.js',
 
@@ -41,5 +43,12 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  plugins:[
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    })
+  ]
 }

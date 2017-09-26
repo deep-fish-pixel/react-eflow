@@ -11,8 +11,7 @@ const stateKeyDecorator = function (stateKey) {
     let method = target[property];
 
     storeHasMethodError(target, property, 'stateKey(' + stateKey + ')');
-
-    let methodName = getMethodName(method),
+    let methodName = property || getMethodName(method),
       stateKeys = target.constructor.StateKeys;
     if(!stateKeys){
       stateKeys = target.constructor.StateKeys = {};
