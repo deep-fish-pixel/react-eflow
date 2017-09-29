@@ -10,6 +10,9 @@ import {getMethodName, getOriginalMethodName} from './method';
 import pubSub from './pubSub';
 import DefaultObject from './DefaultObject';
 import UpdateQueue from './UpdateQueue';
+import {Method} from './constants';
+
+
 
 const emptyObject = {};
 Object.freeze(emptyObject);
@@ -148,12 +151,25 @@ class Store {
   * @param {Object} value 对应的数值
   * */
   dispatch(method, value){
+    this._dispatch(method, value, Method.dispatch);
+  }
+  /*
+   * 当前方法获取/设置并发布数据
+   * */
+  contextDispatch(method, value){
+    this._dispatch(method, value, Method.contextDispatch);
+  }
+  /*
+   * 方法获取/设置并发布数据
+   * */
+  _dispatch(method, value, invokeName){
     if(method){
       let state = this.state,
         stateKey = method.stateKey;
 
       process.env.NODE_ENV !== 'production'
-      && invariant(stateKey, '调用%s.dispatch 方法, 参数值%s 的stateKey为空, stateKey属性在构造函数中进行初始化, 应该是非原型方法', getMethodName(this), getMethodName(method) || 'method');
+      && invariant(stateKey, '调用%s.%s 方法, 参数值%s 的stateKey为空, stateKey属性在构造函数中进行初始化, 应该是非原型方法', getMethodName(this.constructor), invokeName, getMethodName(method) || 'method');
+
       this.change(state, stateKey, value, method);
     }
     this.updateQueue.exec((stateKey, nextValue, method)=>{
@@ -170,9 +186,9 @@ class Store {
       shouldUpdate;
     nextValue = assign(this, state, stateKey, value);
 
-    //如果value是对象,进行深度检测
+	  //如果value是对象,进行深度检测
     if (isObject(value)) {
-      if (shallowEqual(curValue, nextValue)) {
+	    if (shallowEqual(curValue, nextValue)) {
         for (let propName in value) {
           if (value.hasOwnProperty(propName)
             && !shallowEqual(curValue[propName], value[propName])) {
@@ -213,10 +229,26 @@ class Store {
    * @return {Array | Object}
    * */
   data(method, value){
-    let stateKey = method.stateKey;
+    return this._data(Array.prototype.slice.apply(arguments, [0, 2]), Method.data);
+  }
+
+  /*
+  * 当前方法获取/设置数据
+  * */
+  contextData(method, value){
+    return this._data(Array.prototype.slice.apply(arguments, [0, 2]), Method.contextData);
+  }
+
+  /*
+   * 方法获取/设置数据
+   * */
+  _data(invokerArguments, invokeName){
+    let method = invokerArguments[0],
+      value = invokerArguments[1],
+      stateKey = method.stateKey;
     process.env.NODE_ENV !== 'production'
-    && invariant(stateKey, '调用%s.data 方法, 参数值%s 的stateKey为空, stateKey属性在构造函数中进行初始化, 应该是非原型方法', getMethodName(this), getMethodName(method) || 'method');
-    if(arguments.length >= 2){
+    && invariant(stateKey, '调用%s.%s 方法, 参数值%s 的stateKey为空, stateKey属性在构造函数中进行初始化, 应该是非原型方法', getMethodName(this), invokeName, getMethodName(method) || 'method');
+    if(invokerArguments.length >= 2){
       this.change(this.state, stateKey, value, method)
     }
     else {

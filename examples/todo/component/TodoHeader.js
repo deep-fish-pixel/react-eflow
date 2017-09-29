@@ -16,7 +16,8 @@ class TodoHeader extends Component {
   enterDown(event){
     let value = this.state.value;
     if(event.keyCode === 13 && value){
-      todoStore.addTodo(value);
+      const addTodo= todoStore.addTodo;
+      addTodo(value);
       this.setState({
         value: ''
       });

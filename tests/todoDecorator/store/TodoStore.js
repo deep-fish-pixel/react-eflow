@@ -22,7 +22,7 @@ class TodoStore extends Store{
       text: text,
       id: ++ this.count
     });
-    return {request: false};
+    this.dispatch({request: false});
   }
 
   @param('addTodo.setData', 'todos.setData', 'todos.data')
@@ -48,11 +48,38 @@ class TodoStore extends Store{
     dispatchCallback && dispatchCallback.call(this, this.updateQueue, todos);
   }
 
+  @param('addTodo.setData')
+  @setData('todos')
+  @data('todos')
+  @dispatch('todos')
+  operateTodosTypeScript(addTodoSetData, prevDispatchCallback, dispatchCallback){
+    let todos = this.data(),
+      length = todos.length;
+    addTodoSetData({request: true});
+    addTodoSetData({request: false});
+    addTodoSetData({request: true});
+    for(var i = 0; i < length; i++){
+      if(i < length / 2){
+        todos[i] = {...todos[i], completed: !todos[i].completed};
+        this.data(todos);
+      }
+      else{
+        todos.pop();
+        this.data(todos);
+      }
+    }
+
+    prevDispatchCallback && prevDispatchCallback.call(this, this.updateQueue, todos);
+    this.dispatch(todos);
+    dispatchCallback && dispatchCallback.call(this, this.updateQueue, todos);
+  }
+
   @stateKey('aliasTodos')
   @param(param.data)
-  todos(data, todo){
-    data.push(todo);
-    return data;
+  @dispatch('todos')
+  todos(todos, todo){
+    todos.push(todo);
+	  this.dispatch(todos);
   }
 
   @param('todos.dispatch', 'todos.data')
@@ -66,8 +93,11 @@ class TodoStore extends Store{
     dispatch(todos);
   }
 
-  @param('todos.dispatch', 'todos.data')
-  toggleTodo(dispatch, todos, id){
+
+  @data('todos')
+  @dispatch('todos')
+  toggleTodo(id){
+    let todos = this.data();
     todos.some(function(todo, index){
       if(id == todo.id){
         //注意替换新值
@@ -75,7 +105,7 @@ class TodoStore extends Store{
         return true;
       }
     });
-    dispatch(todos);
+    this.dispatch(todos);
   }
 
   @param('todos.dispatch', 'todos.data')
@@ -102,11 +132,24 @@ class TodoStore extends Store{
 
   @flowFrom('todos', 'setFilter')
   @stateKey('aliasFilterTodos')
-  @param(param.dispatch, 'todos.data', 'setFilter.data')
-  filterTodos(dispatch, todos, filter){
+  @param('todos.data', 'setFilter.data')
+  filterTodos(todos, filter){
     let filterTodos = getTodos(todos, filter);
-    dispatch(filterTodos);
+    this.dispatch(filterTodos);
   }
+
+  @dispatch('todos')
+  testDispatchUsedParam(){
+    this.dispatch([{
+      text: 'testDispatchUsedParam',
+      id: ++ this.count
+    }]);
+  }
+  
+	testObject(){
+		let dispatch = this.testObject.dispatch;
+		dispatch({});
+	}
 }
 
 function getTodos(todos, filter){
@@ -127,12 +170,25 @@ let todoStore1 = new TodoStore();
 let todoStore2 = new TodoStore();
 
 let todoStore3 = new TodoStore();
-
+let todoStore4 = new TodoStore();
+todoStore4.testDispatchUsedParam();
+todoStore4.testObject();
+todoStore4.testObject.data();
+todoStore4.getState()
 export {
   todoStore1,
   todoStore2,
-  todoStore3
+  todoStore3,
+  todoStore4
 }
 
-
 export default new TodoStore();
+
+/*let cacheOperates;
+todoStore4.operateTodosTypeScript(function (updateQueue, todos) {
+  cacheOperates = Object.getOwnPropertyNames(updateQueue.queue);
+  console.log(cacheOperates.length)
+}, function (updateQueue, todos) {
+  cacheOperates = Object.getOwnPropertyNames(updateQueue.queue, todos);
+  console.log(cacheOperates.length)
+});*/

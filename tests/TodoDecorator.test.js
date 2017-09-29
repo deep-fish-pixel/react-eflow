@@ -6,7 +6,7 @@ import {shallow, mount} from 'enzyme';
 import TodoIndex from './todoDecorator/component/TodoIndex';
 import TodoHeader from './todoDecorator/component/TodoHeader';
 import TodoList from './todoDecorator/component/TodoList';
-import todoStore, {todoStore1, todoStore2, todoStore3} from './todoDecorator/store/TodoStore';
+import todoStore, {todoStore1, todoStore2, todoStore3, todoStore4} from './todoDecorator/store/TodoStore';
 import './preHandleEnv';
 
 
@@ -226,17 +226,29 @@ describe('测试 TodoDecorator: <TodoIndex />', () => {
       todoStore.operateTodos(function (updateQueue, todos) {
         cacheOperates = Object.getOwnPropertyNames(updateQueue.queue);
         expect(cacheOperates.length).toBe(2);
+        expect(todos.length > 0).toBe(true);
       }, function (updateQueue, todos) {
-        cacheOperates = Object.getOwnPropertyNames(updateQueue.queue);
+        cacheOperates = Object.getOwnPropertyNames(updateQueue.queue, todos);
         expect(cacheOperates.length).toBe(0);
+        expect(todos.length > 0).toBe(true);
+      });
+
+      todoStore.operateTodosTypeScript(function (updateQueue, todos) {
+        cacheOperates = Object.getOwnPropertyNames(updateQueue.queue);
+        expect(cacheOperates.length).toBe(1);
+        expect(todos.length > 0).toBe(true);
+      }, function (updateQueue, todos) {
+        cacheOperates = Object.getOwnPropertyNames(updateQueue.queue, todos);
+        expect(cacheOperates.length).toBe(0);
+        expect(todos.length > 0).toBe(true);
       });
 
       expect(todoList.find('ul').text()).not.toBe('customPropsMapping|Updaters|TodoFilterStoreTest error');
 
       let todoItems = todoIndex.find('TodoList').find('TodoItem');
       todos = todoStore.filterTodos.data();
-      console.log(`删除${length - Math.floor(length/2)}个任务,剩余任务数:` + todos.length);
-      expect(length - Math.floor(length/2)).toBe(todoItems.nodes.length);
+      console.log(`删除${length - Math.floor(length*3/4)}个任务,剩余任务数:` + todos.length);
+      expect(length - Math.floor(length*3/4)).toBe(todoItems.nodes.length);
     }
   });
 
@@ -263,6 +275,7 @@ describe('测试 TodoDecorator: <TodoIndex />', () => {
     expect(todoStore1.todos.data()[0].id == 1).toBeTruthy();
     expect(todoStore2.todos.data()[0].id == 2).toBeTruthy();
     expect(todoStore3.todos.data()[0].id == 3).toBeTruthy();
+    expect(todoStore4.todos.data().length == 1).toBeTruthy();
   })
 });
 

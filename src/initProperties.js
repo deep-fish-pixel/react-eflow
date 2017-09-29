@@ -7,9 +7,10 @@ import {forEachPrototype} from './prototype';
 import {getMethodName} from './method';
 import pubSub from './pubSub';
 import {isString, isFunction} from './types';
+import handleDynamic from './handleDynamic';
+import {Method} from './constants';
 
 let methodCount = 0;
-
 export function getKeyByWords() {
   let words = [];
   for(let i = 0; i < arguments.length; i++){
@@ -26,7 +27,11 @@ export function createUniqueMethodKey(...args) {
 * 初始化store,为store的每个方法添加key及回调
 * */
 export default function initProperties(obj, id) {
-  let construtor = obj.constructor;
+  let construtor = obj.constructor,
+    originalDispatch = obj.dispatch,
+    originalContextDispatch = obj.contextDispatch,
+    originalData = obj.data,
+    originalContextData = obj.contextData;
   const stateKeys = construtor.StateKeys || {};
   const flowFroms = construtor.FlowFroms || {};
 
@@ -38,7 +43,7 @@ export default function initProperties(obj, id) {
       * */
       if(!method.displayName){
         let coreMethod = method;
-        method = construtor.prototype[methodName] = function innerMethod() {
+        function innerMethod() {
           let returnDispatchName =  coreMethod.returnDispatchName || methodName;
           let returnValue = coreMethod.apply(this, Array.prototype.slice.apply(arguments));
           if(returnValue !== undefined){
@@ -46,13 +51,45 @@ export default function initProperties(obj, id) {
           }
           return returnValue;
         };
-        method.displayName = methodName;
+
+        construtor.prototype[methodName] = innerMethod;
+        innerMethod.displayName = methodName + 'InnerMethod';
       }
       let innerMethod = construtor.prototype[methodName];
-      method = obj[methodName] = function wrapInnerMethod() {
-        return innerMethod.apply(obj, Array.prototype.slice.apply(arguments));
-      };
-      method.displayName = methodName;
+      function wrapInnerMethod() {
+        //用于dispatch、data的方法控制
+        return handleDynamic(this,
+          [
+            [
+              Method.dispatch,
+              originalDispatch
+            ],
+            [
+              Method.contextDispatch,
+              originalContextDispatch
+            ],
+            [
+              Method.data,
+              originalData
+            ],
+            [
+              Method.contextData,
+              originalContextData
+            ],
+            [
+              Method.setData,
+              originalData,
+              Method.data
+            ],
+          ],
+          methodName,
+          innerMethod,
+          Array.prototype.slice.apply(arguments)
+        );
+      }
+      wrapInnerMethod.displayName = methodName + 'WrapInnerMethod';
+      method = obj[methodName] = wrapInnerMethod.bind(obj);
+      method.displayName = methodName + 'WrapInnerMethod';
 
       let extend = {
         //获取key名称

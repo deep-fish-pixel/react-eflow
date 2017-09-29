@@ -1,7 +1,7 @@
 var webpack = require("webpack");
 
 module.exports = {
-  entry: './tests/todoDecorator/index.js',
+  entry: './examples/todo/index.js',
 
   output: {
     filename: 'bundle.js',
@@ -10,6 +10,7 @@ module.exports = {
 
   module: {
     loaders: [
+      { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -43,12 +44,5 @@ module.exports = {
         }
       }
     ]
-  },
-  plugins:[
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      }
-    })
-  ]
+  }
 }

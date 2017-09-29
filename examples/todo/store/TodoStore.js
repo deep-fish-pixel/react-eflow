@@ -1,56 +1,48 @@
-import {Store} from '../../../src/eflow';
+import {Store, dispatch, data, param, stateKey, flowFrom} from '../../../src/eflow';
 
 class TodoStore extends Store{
   constructor(options){
     super(options);
     this.count = 0;
-    this.filterTodos.flowFrom(this.todos);
-    this.filterTodos.flowFrom(this.filter);
     this.initState({
       todos: [],
       filterTodos: [],
-      filter: 'All'
+      filterName: 'All'
     });
   }
 
-  addTodo(text){
-    var dispatch = this.addTodo.dispatch;
-
-    dispatch({request: true});
-    var self = this;
-    setTimeout(function () {
+  @dispatch
+  addTodo(dispatch, text){
+    setTimeout(() => {
       dispatch({request: false});
-      self.todos({
+      this.todos({
         text: text,
-        id: ++ self.count
+        id: ++ this.count
       });
     }, 1000);
+    return {request: true};
   }
 
-  todos(todo){
-    let dispatch = this.todos.dispatch,
-        todos = this.todos.data();
-
-    todos.push(todo);
-    dispatch(todos);
+  @param(param.data)
+  todos(data, todo){
+    data.push(todo);
+    return data;
   }
 
-  editTodo(_todo){
-    let todos = this.todos.data();
-
+  @param('todos.dispatch', 'todos.data')
+  editTodo(dispatch, data, _todo){
     todos.some(function(todo){
       if(_todo.id == todo.id){
         todo.text = _todo.text;
         return true;
       }
     });
-    this.todos.dispatch(todos);
+    dispatch(todos);
   }
 
-  toggleTodo(id){
-    let dispatch = this.todos.dispatch,
-      todos = this.todos.data();
-
+  @param('todos.data')
+  @dispatch.return('todos')
+  toggleTodo(todos, id){
     todos.some(function(todo, index){
       if(id == todo.id){
         //注意替换新值
@@ -58,69 +50,50 @@ class TodoStore extends Store{
         return true;
       }
     });
-    dispatch(todos);
+    return todos;
   }
 
-  toggleTodos(){
-    let dispatch = this.todos.dispatch,
-      todos = this.todos.data();
-
+  @param('todos.dispatch', 'todos.data')
+  toggleTodos(dispatch, todos){
     todos = todos.map(function(todo){
       return {...todo, completed: !todo.completed};
     });
     dispatch(todos);
   }
 
-  deleteTodo(id){
-    let dispatch = this.todos.dispatch,
-      todos = this.todos.data();
-
+  @param('todos.dispatch', 'todos.data')
+  deleteTodo(dispatch, todos, id){
     todos = todos.filter(function(todo){
       return todo.id !== id;
     });
     dispatch(todos);
   }
 
-
-  showAll(){
-    this.filter('All');
-  }
-
-  showActive(){
-    this.filter('Active');
-  }
-
-  showCompleted(){
-    this.filter('Completed');
-  }
-
-  filter(filter){
-    var dispatch = this.filter.dispatch;
+  @dispatch
+  @stateKey('filterName')
+  setFilter(dispatch, filter){
     dispatch(filter);
   }
 
-  filterTodos(){
-    let dispatch = this.filterTodos.dispatch,
-      todos = this.todos.data(),
-      filter = this.filter.data();
-
-    let filterTodos = this.getTodos(todos, filter);
+  @flowFrom('todos', 'setFilter')
+  @param(param.dispatch, 'todos.data', 'setFilter.data')
+  filterTodos(dispatch, todos, filter){
+    let filterTodos = getTodos(todos, filter);
     dispatch(filterTodos);
   }
+}
 
-  getTodos(todos, filter){
-    switch (filter) {
-      case 'All':
-        return todos;
-      case 'Completed':
-        return todos.filter(t => t.completed);
-      case 'Active':
-        return todos.filter(t => !t.completed);
-      default:
-        throw new Error('Unknown filter: ' + filter)
-    }
+function getTodos(todos, filter){
+  switch (filter) {
+    case 'All':
+      return todos;
+    case 'Completed':
+      return todos.filter(t => t.completed);
+    case 'Active':
+      return todos.filter(t => !t.completed);
+    default:
+      throw new Error('Unknown filter: ' + filter)
   }
-
 }
 
 export default new TodoStore();

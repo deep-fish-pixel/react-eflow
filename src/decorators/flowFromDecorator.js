@@ -3,16 +3,14 @@
  * param装饰
  */
 import {getMethodName} from '../method';
-import {storeHasMethodError} from '../handleError';
+import {storeHasMethodError, getDecoratorUsedName} from '../handleError';
 
 
 const flowFromDecorator = function () {
   const flowFromKeys = Array.prototype.slice.apply(arguments);
   return function (target, property, desc) {
     let method = target[property],
-      decoratorName = '@flowFrom(' + flowFromKeys.map(function (value) {
-                        return "'" + value + "'";
-                      }).join(',') + ')';
+      decoratorName = getDecoratorUsedName('flowFrom', flowFromKeys);
     storeHasMethodError(
       target,
       property,

@@ -1,43 +1,45 @@
 /**
  * Created by mawei on 17/8/11.
  */
-import React, {Component} from 'react';
+import * as React from "react";
 import Link from './Link';
 import {wrapComponent} from '../../../src/eflow';
 import todoStore from '../store/TodoStore';
 
-function customPropsMapping(state, oldProps) {
+function customPropsMapping(state: {filterTodos: {}[]}, oldProps: {}) {
   return {
-    itemLength: state.aliasFilterTodos.length
+    itemLength: state.filterTodos.length
   }
+}
+interface P{
+    itemLength?: number
 }
 
 @wrapComponent([todoStore.filterTodos], customPropsMapping)
-class TodoFooter extends Component {
-  constructor(props){
+class TodoFooter extends React.Component<P> {
+  constructor(props: object){
     super(props);
   }
 
   render(){
     let itemLength = this.props.itemLength;
-    console.log(`TodoFooter render`);
     return (
       <div>
         <span style={{marginRight: 10}}
               data-length={itemLength}>
           {itemLength > 1 ? itemLength + ' items' : itemLength + ' item'}
         </span>
-        Show:&nbsp;
+        Show:
         <Link
-          filterName="All">
-          All
-        </Link>,&nbsp;
+          filter="All">
+            Active
+        </Link>,
         <Link
-          filterName="Active">
+          filter="Active">
           Active
-        </Link>,&nbsp;
+        </Link>,
         <Link
-          filterName="Completed">
+          filter="Completed">
           Complete
         </Link>
       </div>

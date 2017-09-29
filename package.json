@@ -1,8 +1,9 @@
 {
   "name": "react-eflow",
-  "version": "1.0.20",
+  "version": "1.2.1",
   "description": "eflow manage react data ",
   "main": "lib/eflow.js",
+  "types": "lib/eflow.d.ts",
   "scripts": {
     "start": "webpack-dev-server --inline --content-base .",
     "build": "gulp build",
@@ -15,6 +16,9 @@
     "shallowequal": "^1.0.2"
   },
   "devDependencies": {
+    "@types/react": "^16.0.5",
+    "@types/react-dom": "^15.5.4",
+    "awesome-typescript-loader": "^3.2.3",
     "babel-core": "^6.5.1",
     "babel-jest": "^20.0.3",
     "babel-loader": "^6.2.2",

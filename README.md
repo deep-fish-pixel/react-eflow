@@ -23,47 +23,31 @@ class SomeStore extends Store{
     super(options);
   }
 
-  doSomeThing(){
-    //通过this.doSomeThing获取该方法的dispatch
-    var dispatch = this.doSomeThing.dispatch;
-    //发布相关数据，发布后在该对象内部state的doSomeThing属性包含发布值
-    dispatch({request: true});
+  @dispatch
+  doSomeThing(dispatch) {
+      //获取该方法的dispatch
+      //发布相关数据，发布后在该对象内部state的doSomeThing属性包含发布值
+      setTimeout(()=>{
+        dispatch({request: true});
+      }, 1000);
   }
 //实例化
 export default new SomeStore();
 ```
 
-##### 2. 调用Store的实例
+##### 2. 调用Store并同步Store数据到组件
 
 ```
 import {wrapComponent} from 'react-eflow'
 import someStore from '../store/SomeStore'
 
+@wrapComponent([someStore.doSomeThing])
 class SomeComponent extends Component {
   constructor(props){
     super(props);
     //调用someStore.doSomeThing
     someStore.doSomeThing();
     //调用完成后，someStore内部state值： {doSomeThing:{request: true}}
-  }
-  render(){
-    return <div></div>;
-  }
-}
-
-export default SomeComponent;
-```
-
-##### 3. 同步Store数据到组件
-
-```
-import {wrapComponent} from 'react-eflow'
-import someStore from '../store/SomeStore'
-
-class SomeComponent extends Component {
-  constructor(props){
-    super(props);
-    someStore.doSomeThing();
   }
   render(){
     {/*在this.props.doSomeThing中则会有{request: true} 对象*/}
@@ -75,10 +59,6 @@ class SomeComponent extends Component {
     );
   }
 }
-//需要先包装SomeComponent组件，再绑定someStore.doSomeThing方法，
-//使someStore.doSomeThing.dispatch触发后自动更新数据到SomeHeader组件的props.doSomeThing属性上
-//在render内部通过props即可获取request值
-export default wrapComponent(SomeComponent, [someStore.doSomeThing]);
 ```
 ### 其他文档
 #### [Api介绍](./docs/Api.md)

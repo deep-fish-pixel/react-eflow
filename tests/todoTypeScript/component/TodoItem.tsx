@@ -1,11 +1,15 @@
 /**
  * Created by mawei on 17/8/11.
  */
-import React, {Component} from 'react'
-import todoStore from '../store/TodoStore'
+import * as React from "react";
+import todoStore from '../store/TodoStore';
 
-class TodoItem extends Component {
-  constructor(props){
+interface Props {
+  todo: {completed: boolean, id: number, text: string};
+}
+
+class TodoItem extends React.Component<Props, {}> {
+  constructor(props: {todo: {completed: boolean, id: number, text: string}}){
     super(props);
     this.state = {};
   }

@@ -2,8 +2,10 @@
  * Created by mawei on 17/8/11.
  */
 import React, {Component} from 'react'
+import {wrapComponent} from '../../../src/eflow';
 import todoStore from '../store/TodoStore';
 
+@wrapComponent([todoStore.addTodo])
 class TodoHeader extends Component {
   constructor(props){
     super(props);
@@ -38,7 +40,7 @@ class TodoHeader extends Component {
   }
 
   render(){
-    let request = this.props.addTodo;
+    let request = this.props.addTodo.request;
     return (
       <div>
         <input
@@ -46,6 +48,8 @@ class TodoHeader extends Component {
           onKeyDown={this.enterDown}
           onChange={this.change}
         />
+
+        {request + ''}
       </div>
     );
   }

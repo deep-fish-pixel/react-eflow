@@ -10,6 +10,7 @@ import setData from './decorators/setDataDecorator';
 import param from './decorators/paramDecorator';
 import stateKey from './decorators/stateKeyDecorator';
 import flowFrom from './decorators/flowFromDecorator';
+import {Method} from './constants';
 
 export {
   //包装组件,管理组件的更新
@@ -27,5 +28,7 @@ export {
   //stateKey装饰器
   stateKey,
   //flowFrom装饰器
-  flowFrom
+  flowFrom,
+
+  Method
 }
