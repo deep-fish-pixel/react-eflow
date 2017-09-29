@@ -51,6 +51,8 @@
     "enzyme": "^2.9.1",
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.0",
+    "gulp-clean": "^0.3.2",
+    "gulp-rename": "^1.2.2",
     "http-server": "^0.8.5",
     "jest": "^20.0.4",
     "react": "^15.6.1",
