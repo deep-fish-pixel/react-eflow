@@ -44,10 +44,13 @@ export function setData(
     descriptor: TypedPropertyDescriptor<any>): TypedPropertyDescriptor<any>;
 
 export function param(...decorators: string[]): Function;
+
 export enum Method {
     dispatch = 'dispatch',
     data = 'data',
     setData = 'setData',
+    ontextDispatch = 'contextDispatch',
+    ontextData = 'contextData'
 }
 export function flowFrom(...decorators: string[]): Function;
 export function stateKey(stateKeyName: string): Function;
