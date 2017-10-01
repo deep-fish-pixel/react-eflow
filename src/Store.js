@@ -164,11 +164,14 @@ class Store {
    * */
   _dispatch(method, value, invokeName){
     if(method){
+      process.env.NODE_ENV !== 'production'
+      && invariant(isFunction(method), '调用%s.%s 方法, method参数类型不是方法, 请检查this.' + invokeName + '使用方式是否正确, 如上下文环境切换导致或首个参数类型需为方法', getMethodName(this.constructor), invokeName);
+
       let state = this.state,
         stateKey = method.stateKey;
 
       process.env.NODE_ENV !== 'production'
-      && invariant(stateKey, '调用%s.%s 方法, 参数值%s 的stateKey为空, stateKey属性在构造函数中进行初始化, 应该是非原型方法', getMethodName(this.constructor), invokeName, getMethodName(method) || 'method');
+      && invariant(stateKey, '调用%s.%s 方法, 参数值%s 的stateKey为空, stateKey属性在构造函数中进行初始化, 应该是非原型方法', getMethodName(this.constructor), invokeName, getOriginalMethodName(method) || 'method');
 
       this.change(state, stateKey, value, method);
     }
@@ -219,7 +222,7 @@ class Store {
   bindDispatch(method){
     let name = getOriginalMethodName(method);
     process.env.NODE_ENV !== 'production'
-    && invariant(name, '调用%s.data 方法, 参数值%s 的name或displayName为空, displayName属性已在构造函数中进行初始化', getMethodName(this), name || 'method');
+    && invariant(name, '调用%s.data 方法, 参数值%s 的name或displayName为空, displayName属性已在构造函数中进行初始化', getOriginalMethodName(this.constructor), name || 'method');
     return this.dispatch.bind(this, method);
   }
   /*
@@ -247,7 +250,10 @@ class Store {
       value = invokerArguments[1],
       stateKey = method.stateKey;
     process.env.NODE_ENV !== 'production'
-    && invariant(stateKey, '调用%s.%s 方法, 参数值%s 的stateKey为空, stateKey属性在构造函数中进行初始化, 应该是非原型方法', getMethodName(this), invokeName, getMethodName(method) || 'method');
+    && invariant(isFunction(method), '调用%s.%s 方法, method参数类型不是方法, 请检查this.' + invokeName + '使用是否正确, 如上下文环境切换导致或首个参数类型需为方法', getMethodName(this.constructor), invokeName);
+
+    process.env.NODE_ENV !== 'production'
+    && invariant(stateKey, '调用%s.%s 方法, 参数值%s 的stateKey为空, stateKey属性在构造函数中进行初始化, 应该是非原型方法', getMethodName(this), invokeName, getOriginalMethodName(method) || 'method');
     if(invokerArguments.length >= 2){
       this.change(this.state, stateKey, value, method)
     }
@@ -275,7 +281,7 @@ class Store {
   pub(method){
     let key = method._eflowKey;
     process.env.NODE_ENV !== 'production'
-    && invariant(key, '调用%s.pub 方法, 参数值%s 的_eflowKey为空, 该属性已在构造函数中进行初始化', getMethodName(this), getMethodName(method) || 'method');
+    && invariant(key, '调用%s.pub 方法, 参数值%s 的_eflowKey为空, 该属性已在构造函数中进行初始化', getMethodName(this), getOriginalMethodName(method) || 'method');
     try{
       pubSub.pub(key);
     }catch(e) {

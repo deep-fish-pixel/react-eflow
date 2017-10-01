@@ -21,11 +21,15 @@ gulp.task('clean', ['transform'], function () {
 });
 
 gulp.task('copy', ['clean'], function(){
+  gulp.src(['src/eflow.d.ts'])
+    .pipe(gulp.dest("./lib"));
+
   gulp.src(['package.json', 'README.md', 'lib/**/*', 'src/**/*'], {base:"."})
     .pipe(gulp.dest('../react-eflow-build'));
 });
 
-gulp.task('build', ['copy'], function(){
+gulp.task('default', ['copy'], function(){
+
   gulp.src(['src/eflow.d.ts'])
     .pipe(gulpRename('index.d.ts'))
     .pipe(gulp.dest("../react-eflow-build"));

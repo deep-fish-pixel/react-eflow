@@ -4,7 +4,7 @@
  * */
 import invariant from 'invariant';
 import {forEachPrototype} from './prototype';
-import {getMethodName} from './method';
+import {getMethodName, getOriginalMethodName} from './method';
 import pubSub from './pubSub';
 import {isString, isFunction} from './types';
 import handleDynamic from './handleDynamic';
@@ -53,7 +53,7 @@ export default function initProperties(obj, id) {
         };
 
         construtor.prototype[methodName] = innerMethod;
-        innerMethod.displayName = methodName + 'InnerMethod';
+        innerMethod.displayName = 'innerMethod(' + methodName + ')';
       }
       let innerMethod = construtor.prototype[methodName];
       function wrapInnerMethod() {
@@ -87,9 +87,9 @@ export default function initProperties(obj, id) {
           Array.prototype.slice.apply(arguments)
         );
       }
-      wrapInnerMethod.displayName = methodName + 'WrapInnerMethod';
+      wrapInnerMethod.displayName = 'wrapInnerMethod(' + methodName + ')';
       method = obj[methodName] = wrapInnerMethod.bind(obj);
-      method.displayName = methodName + 'WrapInnerMethod';
+      method.displayName = 'wrapInnerMethod(' + methodName + ')';
 
       let extend = {
         //获取key名称
@@ -111,16 +111,16 @@ export default function initProperties(obj, id) {
             _eflowKey,
             '%s.%s 方法, _eflowKey值为空',
             getMethodName(source.owner.constructor),
-            getMethodName(source) || 'method'
+            getOriginalMethodName(source) || 'method'
           );
           process.env.NODE_ENV !== 'production'
           && invariant(
             !this.flows[_eflowKey],
             '%s.%s 已同步 %s.%s',
             getMethodName(this.owner.constructor),
-            getMethodName(this) || 'method',
+            getOriginalMethodName(this) || 'method',
             getMethodName(source.owner.constructor),
-            getMethodName(source) || 'method'
+            getOriginalMethodName(source) || 'method'
           );
           this.flows[_eflowKey] = function flow() {
             obj[methodName]();
@@ -160,7 +160,7 @@ function initFlowFroms(store, method, methodFlowFroms) {
         store[flowFrom],
         '%s.%s的装饰器 %s 存在错误: 绑定的%s.%s方法不存在, 该类原型上没有%s方法',
         targetClassName,
-        getMethodName(method),
+        getOriginalMethodName(method),
         methodFlowFroms.decoratorName,
         targetClassName,
         flowFrom,
@@ -174,9 +174,9 @@ function initFlowFroms(store, method, methodFlowFroms) {
         flowFrom.owner,
         '%s.%s的装饰器 %s 存在错误: 绑定的对象.%s方法不存在, 该方法可能被覆盖',
         targetClassName,
-        getMethodName(method),
+        getOriginalMethodName(method),
         methodFlowFroms.decoratorName,
-        getMethodName(method)
+        getOriginalMethodName(method)
       );
       method.flowFrom(flowFrom);
     }

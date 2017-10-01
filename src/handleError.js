@@ -10,7 +10,7 @@ import {getMethodName} from './method';
 * */
 export function getDecoratorUsedName(decoratorName, params) {
   params = Array.prototype.slice.apply(params);
-  return [decoratorName + '(' + params.map(function (value) {
+  return ['@' + decoratorName + '(' + params.map(function (value) {
       return "'" + value + "'";
     }).join(',') + ')'];
   
@@ -20,7 +20,7 @@ export function storeHasMethodError(target, property, decoratorName) {
   process.env.NODE_ENV !== 'production'
   && invariant(target[property], '%s装饰器 %s 存在错误: %s原型中不存在%s方法',
     getMethodName(target.constructor) + '.' +property + '方法的',
-    '@' + decoratorName,
+    decoratorName,
     getMethodName(target.constructor),
     property);
 }

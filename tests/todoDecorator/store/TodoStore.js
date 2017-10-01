@@ -150,6 +150,16 @@ class TodoStore extends Store{
 		let dispatch = this.testObject.dispatch;
 		dispatch({});
 	}
+
+  @data('todos')
+  @flowFrom('setFilter', 'todos')
+  testFlowsTodos(_todos: Todo[]){
+    this.testFlowsTodosDone = true;
+    let todos: Todo[] = this.data();
+    let filter: string = this.data(this.setFilter);
+    let filterTodos = getTodos(todos, filter);
+    this.dispatch(filterTodos);
+  }
 }
 
 function getTodos(todos, filter){

@@ -41,13 +41,14 @@ var TodoStore = /** @class */ (function (_super) {
         return _this;
     }
     TodoStore.prototype.addTodo = function (text) {
+        var dispatch = this.dispatch;
         this.dispatch({ request: true });
+        dispatch({ request: false });
         this.todos({
             text: text,
             id: ++this.count,
             completed: false
         });
-        this.dispatch({ request: false });
     };
     TodoStore.prototype.todos = function (todo) {
         var todos = this.data();
@@ -94,7 +95,14 @@ var TodoStore = /** @class */ (function (_super) {
     TodoStore.prototype.filter = function (filter) {
         this.dispatch(filter);
     };
-    TodoStore.prototype.filterTodos = function () {
+    TodoStore.prototype.filterTodos = function (dispatch, _todos) {
+        var todos = this.data();
+        var filter = this.data(this.filter);
+        var filterTodos = this.getTodos(todos, filter);
+        this.dispatch(filterTodos);
+    };
+    TodoStore.prototype.testTodos = function (_todos) {
+        this.testTodosDone = true;
         var todos = this.data();
         var filter = this.data(this.filter);
         var filterTodos = this.getTodos(todos, filter);
@@ -131,6 +139,16 @@ var TodoStore = /** @class */ (function (_super) {
         this.dispatch(todos);
         dispatchCallback && dispatchCallback.call(this, this.updateQueue, todos);
     };
+    TodoStore.prototype.testDispatchUsedParam = function () {
+        this.dispatch([{
+                text: 'testDispatchUsedParam',
+                id: ++this.count
+            }]);
+    };
+    TodoStore.prototype.testObject = function () {
+        var dispatch = this.dispatch;
+        dispatch({});
+    };
     __decorate([
         eflow_1.data('todos'),
         eflow_1.dispatch('todos'),
@@ -139,18 +157,40 @@ var TodoStore = /** @class */ (function (_super) {
         __metadata("design:returntype", void 0)
     ], TodoStore.prototype, "toggleTodo", null);
     __decorate([
-        eflow_1.flowFrom('filter', 'todos'),
         eflow_1.data('todos'),
+        eflow_1.dispatch('todos'),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
+        __metadata("design:paramtypes", [Number]),
+        __metadata("design:returntype", void 0)
+    ], TodoStore.prototype, "deleteTodo", null);
+    __decorate([
+        eflow_1.data('todos'),
+        eflow_1.param('todos.data'),
+        eflow_1.dispatch,
+        eflow_1.flowFrom('filter', 'todos'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Function, Array]),
         __metadata("design:returntype", void 0)
     ], TodoStore.prototype, "filterTodos", null);
+    __decorate([
+        eflow_1.data('todos'),
+        eflow_1.flowFrom('filter', 'todos'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Array]),
+        __metadata("design:returntype", void 0)
+    ], TodoStore.prototype, "testTodos", null);
     __decorate([
         eflow_1.dispatch('todos'),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function, Function]),
         __metadata("design:returntype", void 0)
     ], TodoStore.prototype, "operateTodos", null);
+    __decorate([
+        eflow_1.dispatch('todos'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], TodoStore.prototype, "testDispatchUsedParam", null);
     return TodoStore;
 }(eflow_1.Store));
 var todoStore1 = new TodoStore();
@@ -159,4 +199,9 @@ var todoStore2 = new TodoStore();
 exports.todoStore2 = todoStore2;
 var todoStore3 = new TodoStore();
 exports.todoStore3 = todoStore3;
+var todoStore4 = new TodoStore();
+exports.todoStore4 = todoStore4;
+todoStore4.testDispatchUsedParam();
+todoStore4.testObject();
+todoStore4.getState();
 exports.default = new TodoStore();

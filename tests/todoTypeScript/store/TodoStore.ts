@@ -10,7 +10,9 @@ interface Todo{
 
 
 class TodoStore extends Store<Props>{
-  count: number
+  count: number;
+  testTodosDone: boolean;
+
   constructor(options?: Props){
     super(options);
     this.count = 0;
@@ -22,13 +24,16 @@ class TodoStore extends Store<Props>{
   }
 
   addTodo(text: string){
+    let dispatch = this.dispatch;
     this.dispatch({request: true});
+    dispatch({request: false});
     this.todos({
       text: text,
       id: ++ this.count,
       completed: false
     });
-    this.dispatch({request: false});
+
+
   }
 
   todos(todo: Todo){
@@ -62,6 +67,8 @@ class TodoStore extends Store<Props>{
     this.dispatch(todos);
   }
 
+  @data('todos')
+  @dispatch('todos')
   deleteTodo(id: number){
     let todos: Todo[] = this.data();
     todos = todos.filter(function(todo){
@@ -86,9 +93,21 @@ class TodoStore extends Store<Props>{
     this.dispatch(filter);
   }
 
-  @flowFrom('filter', 'todos')
   @data('todos')
-  filterTodos(){
+  @param('todos.data')
+  @dispatch
+  @flowFrom('filter', 'todos')
+  filterTodos(dispatch: Function, _todos: Todo[]){
+    let todos: Todo[] = this.data();
+    let filter: string = this.data(this.filter);
+    let filterTodos = this.getTodos(todos, filter);
+    this.dispatch(filterTodos);
+  }
+
+  @data('todos')
+  @flowFrom('filter', 'todos')
+  testTodos(_todos: Todo[]){
+    this.testTodosDone = true;
     let todos: Todo[] = this.data();
     let filter: string = this.data(this.filter);
     let filterTodos = this.getTodos(todos, filter);
@@ -132,6 +151,20 @@ class TodoStore extends Store<Props>{
     dispatchCallback && dispatchCallback.call(this, this.updateQueue, todos);
   }
 
+  @dispatch('todos')
+  testDispatchUsedParam(){
+    this.dispatch([{
+      text: 'testDispatchUsedParam',
+      id: ++ this.count
+    }]);
+  }
+
+  testObject(){
+    let dispatch = this.dispatch;
+    dispatch({});
+  }
+
+
 }
 
 let todoStore1 = new TodoStore();
@@ -140,10 +173,17 @@ let todoStore2 = new TodoStore();
 
 let todoStore3 = new TodoStore();
 
+
+let todoStore4 = new TodoStore();
+todoStore4.testDispatchUsedParam();
+todoStore4.testObject();
+todoStore4.getState()
+
 export {
   todoStore1,
   todoStore2,
-  todoStore3
+  todoStore3,
+  todoStore4
 }
 
 

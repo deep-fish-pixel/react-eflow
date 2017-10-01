@@ -20,6 +20,7 @@ export class Store<P>{
     data(method: Function, data: any): any;
     data(data: any): any;
     data(): any;
+    getState(): any;
 }
 //dispatch装饰：有参数
 export function dispatch(methodName: string): Function
@@ -45,12 +46,13 @@ export function setData(
 
 export function param(...decorators: string[]): Function;
 
-export enum Method {
-    dispatch = 'dispatch',
-    data = 'data',
-    setData = 'setData',
-    ontextDispatch = 'contextDispatch',
-    ontextData = 'contextData'
-}
+export type Method = {
+    dispatch: 'dispatch',
+    data: 'data',
+    setData: 'setData',
+    contextDispatch: 'contextDispatch',
+    contextData: 'contextData'
+};
+
 export function flowFrom(...decorators: string[]): Function;
 export function stateKey(stateKeyName: string): Function;

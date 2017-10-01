@@ -35,9 +35,10 @@ export function decoratorComposite(target, property, desc, otherProperty, descNa
         return propertyFunc.apply(this, Array.prototype.slice.apply(arguments));
       };
 
-      bindInvoke.displayName = invokeMethodName
-        + decoratorName.replace(/^[\w_]/, function(value){return value.toUpperCase();})
-        + 'BindInvoke';
+      bindInvoke.displayName = decoratorName
+        + 'BindInvoke('
+        + invokeMethodName
+        + ')';
     }
   }
   else{
@@ -46,7 +47,12 @@ export function decoratorComposite(target, property, desc, otherProperty, descNa
 
     storeHasMethodError(target, otherProperty, descNames ? descNames[0] : decoratorName);
 
-    desc.value = function decoratorComposite() {
+    desc.value = decoratorComposite;
+    decoratorComposite.displayName = decoratorName
+      + 'DecoratorComposite('
+      + otherProperty
+      + ')';
+    function decoratorComposite() {
       let args = Array.prototype.slice.apply(arguments),
         otherPropertyFunc = this[otherProperty],
         decoratorNameMethod = otherPropertyFunc[decoratorName];
@@ -56,7 +62,7 @@ export function decoratorComposite(target, property, desc, otherProperty, descNa
 
       args.unshift(needInvoke ? decoratorNameMethod() : decoratorNameMethod);
       return propertyFunc.apply(this, args);
-    };
+    }
 
     //透传指定方法
     setDispatchMethodName(desc, propertyFunc);

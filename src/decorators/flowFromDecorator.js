@@ -20,11 +20,15 @@ const flowFromDecorator = function () {
     let methodName = property || getMethodName(method),
       FlowFroms = target.constructor.FlowFroms,
       flows;
+    //初始化FlowFroms
     if(!FlowFroms){
       FlowFroms = target.constructor.FlowFroms = {};
+    }
+    if(!FlowFroms[methodName]){
       FlowFroms[methodName] = [];
     }
     flows = FlowFroms[methodName];
+
     flowFromKeys.forEach(function (flowFromKey) {
       if(flows.indexOf(flowFromKey) === -1){
         flows.push(flowFromKey);

@@ -38,6 +38,11 @@ describe('测试 TodoDecorator: <TodoIndex />', () => {
         : todoNames.length + ' item');
 
   });
+
+  test('测试多个flowFroms时,是否起作用', () => {
+    expect(todoStore.testFlowsTodosDone).toBeTruthy();
+  });
+
   test('随机反转任务, 结果是否相同', () => {
     let todoList = todoIndex.find('TodoList');
 
