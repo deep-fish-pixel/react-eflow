@@ -11,11 +11,11 @@ class SomeComponent extends Component {
     super(props);
     //调用someStore.doSomeThing
     let doSomeThing = someStore.doSomeThing();
-    //调用完成后，someStore内部state值： {doSomeThing:{request: true}}
+    //调用完成后，someStore内部state值： {someThing:{request: true}}
   }
   render(){
-    {/*在this.props.doSomeThing中则会有{request: true} 对象*/}
-    let request = this.props.doSomeThing.request;
+    {/*在this.props.someThing中则会有{request: true} 对象*/}
+    let request = this.props.someThing.request;
     return (
       <div>
         request: {request ? 'true' : 'false'}
