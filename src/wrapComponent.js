@@ -102,7 +102,7 @@ let wrapComponent = function(_Component, updaters, customPropsMapping){
           for(let i = 0; i < updaters.length; i++){
             updater = updaters[i];
             process.env.NODE_ENV !== 'production'
-            && invariant(updater, 'wrapComponent(%s) 方法中, 绑定store的方法为空', getMethodName(_Component));
+            && invariant(updater, 'wrapComponent(%s) 方法中, 参数updaters数组的第%s元素为undefined, 该元素的类型必须为方法。', getMethodName(_Component), i + 1);
             if(updater instanceof Store){
               updaters = replaceElement(updaters, i, getPrototypeMethods(updater));
               i--;
