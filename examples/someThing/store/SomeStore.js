@@ -1,11 +1,11 @@
-import {Store, dispatch} from '../../../src/eflow';
+import {Store, dispatch, stateKey} from '../../../src/eflow';
 
 class SomeStore extends Store {
   constructor(options) {
     super(options);
   }
 
-
+  @stateKey('someThing')//对doSomeThing默认存储key值doSomeThing转换成someThing
   @dispatch
   doSomeThing(dispatch) {
     //获取该方法的dispatch
