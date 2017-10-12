@@ -5,6 +5,7 @@ import React, {Component} from 'react'
 import TodoHeader from './TodoHeader';
 import TodoList from './TodoList';
 import TodoFooter from './TodoFooter';
+import todoStore from '../store/TodoStore';
 
 class TodoIndex extends Component {
   constructor(props){
@@ -16,7 +17,13 @@ class TodoIndex extends Component {
       <div>
         <TodoHeader/>
         <TodoList/>
-        <TodoFooter/>
+        <TodoFooter ref={function(wrap) {
+	        console.log(wrap);
+	        todoStore.setRef(true);
+        }} innerRef={function(inner) {
+	        console.log(inner);
+	        todoStore.setInnerRef(true);
+        }}/>
       </div>
     )
   }

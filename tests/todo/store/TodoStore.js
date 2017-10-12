@@ -93,6 +93,14 @@ class TodoStore extends Store{
     });
     dispatch(todos);
   }
+	
+	setRef(flag){
+		this.data(flag);
+	}
+	
+	setInnerRef(flag){
+		this.data(flag);
+	}
 
 }
 

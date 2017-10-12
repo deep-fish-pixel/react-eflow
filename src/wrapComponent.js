@@ -151,7 +151,7 @@ let wrapComponent = function(_Component, updaters, customPropsMapping){
         var curProps = {}, props = this.props;
         for(var propName in props){
           if(propName === 'innerRef' && props.innerRef){
-            curProps.owner = props.innerRef;
+            curProps.ref = props.innerRef;
           }
           else{
             curProps[propName] = props[propName];
