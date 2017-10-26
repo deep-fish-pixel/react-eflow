@@ -67,14 +67,15 @@ class TodoStore extends Store<Props>{
     this.dispatch(todos);
   }
 
-  @data('todos')
-  @dispatch('todos')
+  //@data('todos')
+  //@dispatch('todos')
   deleteTodo(id: number){
-    let todos: Todo[] = this.data();
+    let todos: Todo[] = this.data(this.todos);
     todos = todos.filter(function(todo){
       return todo.id !== id;
     });
-    this.dispatch(todos);
+    let dispatch = this.dispatch(this.todos);
+    dispatch(todos);
   }
 
   showAll(){

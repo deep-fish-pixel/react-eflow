@@ -76,12 +76,15 @@ var TodoStore = /** @class */ (function (_super) {
         });
         this.dispatch(todos);
     };
+    //@data('todos')
+    //@dispatch('todos')
     TodoStore.prototype.deleteTodo = function (id) {
-        var todos = this.data();
+        var todos = this.data(this.todos);
         todos = todos.filter(function (todo) {
             return todo.id !== id;
         });
-        this.dispatch(todos);
+        var dispatch = this.dispatch(this.todos);
+        dispatch(todos);
     };
     TodoStore.prototype.showAll = function () {
         this.filter('All');
@@ -156,13 +159,6 @@ var TodoStore = /** @class */ (function (_super) {
         __metadata("design:paramtypes", [Number]),
         __metadata("design:returntype", void 0)
     ], TodoStore.prototype, "toggleTodo", null);
-    __decorate([
-        eflow_1.data('todos'),
-        eflow_1.dispatch('todos'),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Number]),
-        __metadata("design:returntype", void 0)
-    ], TodoStore.prototype, "deleteTodo", null);
     __decorate([
         eflow_1.data('todos'),
         eflow_1.param('todos.data'),

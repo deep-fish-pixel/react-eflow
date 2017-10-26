@@ -15,11 +15,25 @@ export class Store<P>{
 
     updateQueue: object;
     initState(state: object): void;
+
+    dispatch(method: Function): Function;
     dispatch(method: Function, data: any): void;
     dispatch(data: any): void;
+
+    contextDispatch(method: Function): Function;
+    contextDispatch(method: Function, data: any): void;
+    contextDispatch(data: any): void;
+
+    bindDispatch(method: Function): Function;
+
     data(method: Function, data: any): any;
     data(data: any): any;
     data(): any;
+
+    contextData(method: Function, data: any): any;
+    contextData(data: any): any;
+    contextData(): any;
+
     getState(): any;
 }
 //dispatch装饰：有参数

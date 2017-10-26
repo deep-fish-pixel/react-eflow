@@ -151,12 +151,18 @@ class Store {
   * @param {Object} value 对应的数值
   * */
   dispatch(method, value){
+    if(arguments.length == 1 && isFunction(method)){
+      return this.bindDispatch(method);
+    }
     this._dispatch(method, value, Method.dispatch);
   }
   /*
    * 当前方法获取/设置并发布数据
    * */
   contextDispatch(method, value){
+    if(arguments.length == 1 && isFunction(method)){
+      return this.bindDispatch(method);
+    }
     this._dispatch(method, value, Method.contextDispatch);
   }
   /*
