@@ -122,7 +122,7 @@ let wrapComponent = function(_Component, updaters, customPropsMapping){
             event[_eflowKey] = function callUpdate() {
               update(true);
             };
-            pubSub.sub(_eflowKey, event[_eflowKey]);
+            pubSub.sub(_eflowKey, event[_eflowKey], 1);
 
             //初始化该方法对应的state值
             Object.assign(state, getState.call(this, store, propsKey, updater));

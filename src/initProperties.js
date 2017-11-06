@@ -37,25 +37,21 @@ export default function initProperties(obj, id) {
 
   forEachPrototype(obj, function (method, methodName) {
     if(methodName !== 'constructor'){
-      /*
-      * 当store有id标识时,所有原形方法转化为实例方法
-      * 主要用于同一Store子类的实例
-      * */
-      if(!method.displayName){
-        let coreMethod = method;
-        function innerMethod() {
-          let returnDispatchName =  coreMethod.returnDispatchName || methodName;
-          let returnValue = coreMethod.apply(this, Array.prototype.slice.apply(arguments));
-          if(returnValue !== undefined){
-            this[returnDispatchName].dispatch(returnValue);
-          }
-          return returnValue;
-        };
+      let coreMethod = method;
+      function innerMethod() {
+        let returnDispatchName =  coreMethod.returnDispatchName || methodName;
+        let returnValue = coreMethod.apply(this, Array.prototype.slice.apply(arguments));
+        if(returnValue !== undefined){
+          this[returnDispatchName].dispatch(returnValue);
+        }
+        return returnValue;
+      };
 
-        construtor.prototype[methodName] = innerMethod;
-        innerMethod.displayName = 'innerMethod(' + methodName + ')';
-      }
-      let innerMethod = construtor.prototype[methodName];
+      construtor.prototype[methodName] = innerMethod;
+      innerMethod.displayName = 'innerMethod(' + methodName + ')';
+
+      innerMethod = construtor.prototype[methodName];
+
       function wrapInnerMethod() {
         //用于dispatch、data的方法控制
         return handleDynamic(this,

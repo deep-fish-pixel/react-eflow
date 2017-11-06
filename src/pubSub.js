@@ -9,15 +9,27 @@ const pubSub = {
    * @param {Function} callback 事件回调
    * @return {Object}
    * */
-  sub: function (name, callback) {
+  sub: function (name, callback, level = 0) {
     if (name) {
       if (!this._events[name]) {
         this._events[name] = [];
       }
       if (!callback)return;
-      this._events[name].push({
+      var events = this._events[name],
+          insertIndex = events.length;
+      while(insertIndex){
+        if(level > events[insertIndex - 1].level){
+          insertIndex --;
+        }
+        else{
+          break;
+        }
+      }
+
+      events.splice(insertIndex, 0, {
         name: name,
-        callback: callback
+        callback: callback,
+        level
       });
     }
     return this;

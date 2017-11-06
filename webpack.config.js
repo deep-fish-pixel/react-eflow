@@ -1,7 +1,7 @@
 var webpack = require("webpack");
 
 module.exports = {
-  entry: './tests/todoTypeScript/index.js',
+  entry: './examples/todo/index.js',
 
   output: {
     filename: 'bundle.js',
