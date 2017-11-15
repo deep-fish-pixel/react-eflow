@@ -74,6 +74,7 @@ class TodoStore extends Store{
   setFilter(dispatch, filter){
     dispatch(filter);
   }
+  
 
   @flowFrom('todos', 'setFilter')
   @param(param.dispatch, 'todos.data', 'setFilter.data')
