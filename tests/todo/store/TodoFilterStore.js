@@ -6,7 +6,8 @@ class TodoFilterStore extends Store{
   constructor(options){
     super(options);
     this.initState({
-      filterTodos: []
+      filterTodos: [],
+      flow: false
     });
   }
 
@@ -20,8 +21,19 @@ class TodoFilterStore extends Store{
     dispatch(filterTodos);
   }
 
+  flowFrom(){
+    this.dispatch(true);
+  }
+
+  @flowFrom('flowFrom')
+  flow(){
+    this.flowFrom();
+    dispatch(true);
+  }
 
 }
+
+
 
 function getTodos(todos, filter){
   switch (filter) {
@@ -37,7 +49,17 @@ function getTodos(todos, filter){
 }
 
 let todoFilterStoreTest = new TodoFilterStore({id: 'todoFilterStore2'});
+let todoFilterStore = new TodoFilterStore();
+/*function testTodoFilterStore() {
+  try {
+    todoFilterStore.flowFrom()
+  }finally {
+  }
+
+};
+testTodoFilterStore();*/
+
 export {
   todoFilterStoreTest
 };
-export default new TodoFilterStore();
+export default todoFilterStore;

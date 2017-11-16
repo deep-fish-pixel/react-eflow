@@ -1,9 +1,36 @@
+import invariant from 'invariant';
+import {getMethodName} from './method';
 import {isFunction} from './types';
+
+let methodContexts = [];
 /*
 * 处理动态方法
 *
 * */
 function handleDynamic(target, dynamicConfigs, innerMethodName, innerMethod, innerMethodArguments) {
+	if(methodContexts && methodContexts.length){
+		//检测上下文flowFrom的方法调用,导致死循环
+		let lastContext = methodContexts[methodContexts.length - 1];
+		process.env.NODE_ENV !== 'production'
+		&& invariant(
+			!lastContext
+				.method
+				.flows
+				.hasOwnProperty(target[innerMethodName]._eflowKey),
+			'检测到方法%s存在对%s调用。%s方法已被%s的flowFrom绑定, %s调用%s可能会导致死循环',
+			lastContext.name,
+			innerMethodName,
+			innerMethodName,
+			lastContext.name,
+			lastContext.name,
+			innerMethodName,
+		);
+	}
+	methodContexts.push({
+		name: innerMethodName,
+		method: target[innerMethodName],
+		target
+	});
   //用于dynamicMethodName的动态控制
   dynamicConfigs.forEach(function (dynamicConfig) {
 	  let dynamicMethodName = dynamicConfig[0],
@@ -75,6 +102,7 @@ function handleDynamic(target, dynamicConfigs, innerMethodName, innerMethod, inn
         delete target[dynamicMethodMapName];
       }
     });
+		methodContexts.pop();
 
   }
 
