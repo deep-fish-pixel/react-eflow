@@ -8,6 +8,7 @@ import {getMethodName, getOriginalMethodName} from './method';
 import pubSub from './pubSub';
 import {isString, isFunction} from './types';
 import handleDynamic from './handleDynamic';
+import Delay from './Delay';
 import {Method} from './constants';
 
 let methodCount = 0;
@@ -34,6 +35,7 @@ export default function initProperties(obj, id) {
 		originalContextData = obj.contextData;
 	const stateKeys = construtor.StateKeys || {};
 	const flowFroms = construtor.FlowFroms || {};
+	const delay = new Delay();
 	
 	forEachPrototype(obj, function (method, methodName) {
 		if(methodName !== 'constructor'){
@@ -61,7 +63,7 @@ export default function initProperties(obj, id) {
 				originalData,
 				originalContextData
 			);
-			
+
 			let extend = {
 				//获取key名称
 				_eflowKey: createUniqueMethodKey(
@@ -113,12 +115,19 @@ export default function initProperties(obj, id) {
 				}
 			};
 			Object.assign(method, extend);
-			//初始化各个方法的flowFrom
-			initFlowFroms(obj, method, flowFroms[methodName]);
+      delay.add(function () {
+        //初始化各个方法的flowFrom
+        initFlowFroms(obj, method, flowFroms[methodName]);
+      });
 		}
 	});
+
+  delay.execute();
 }
 
+/*
+* 包装innerMethod
+* */
 function getWrapInnerMethod(target,
                             method,
                             methodName,
@@ -128,9 +137,11 @@ function getWrapInnerMethod(target,
                             originalData,
                             originalContextData
 ) {
+
 	wrapInnerMethod.displayName = 'wrapInnerMethod(' + methodName + ')';
+	method = target[methodName] = wrapInnerMethod.bind(target);
 	method.displayName = 'wrapInnerMethod(' + methodName + ')';
-	return target[methodName] = wrapInnerMethod.bind(target);
+	return method;
 	
 	function wrapInnerMethod() {
 		//用于dispatch、data的方法控制
@@ -165,6 +176,9 @@ function getWrapInnerMethod(target,
 	}
 }
 
+/*
+* 初始化flows
+* */
 function initFlowFroms(store, method, methodFlowFroms) {
 	if(!methodFlowFroms){
 		return;

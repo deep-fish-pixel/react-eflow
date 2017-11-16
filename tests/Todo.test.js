@@ -38,14 +38,14 @@ describe('测试 TODO: <TodoIndex />', () => {
         : todoNames.length + ' item');
 
   });
-	
+
 	test('测试ref innerRef是否有效', () => {
 		expect(todoStore.getState().setRef)
 			.toBeTruthy();
 		expect(todoStore.getState().setInnerRef)
 			.toBeTruthy();
 	});
-  
+
   test('随机反转任务, 结果是否相同', () => {
     let todoList = todoIndex.find('TodoList');
 

@@ -11,6 +11,13 @@ class TodoStore extends Store{
     });
   }
 
+  @flowFrom('todos', 'setFilter')
+  @param(param.dispatch, 'todos.data', 'setFilter.data')
+  filterTodos(dispatch, todos, filter){
+    let filterTodos = getTodos(todos, filter);
+    dispatch(filterTodos);
+  }
+
   @dispatch
   addTodo(dispatch, text){
     setTimeout(() => {
@@ -73,14 +80,6 @@ class TodoStore extends Store{
   @stateKey('filterName')
   setFilter(dispatch, filter){
     dispatch(filter);
-  }
-  
-
-  @flowFrom('todos', 'setFilter')
-  @param(param.dispatch, 'todos.data', 'setFilter.data')
-  filterTodos(dispatch, todos, filter){
-    let filterTodos = getTodos(todos, filter);
-    dispatch(filterTodos);
   }
 }
 

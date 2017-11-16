@@ -18,10 +18,8 @@ class TodoIndex extends Component {
         <TodoHeader/>
         <TodoList/>
         <TodoFooter ref={function(wrap) {
-	        console.log(wrap);
 	        todoStore.setRef(true);
         }} innerRef={function(inner) {
-	        console.log(inner);
 	        todoStore.setInnerRef(true);
         }}/>
       </div>

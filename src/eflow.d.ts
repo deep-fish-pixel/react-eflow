@@ -27,7 +27,7 @@ export class Store<P>{
     bindDispatch(method: Function): Function;
 
     data(method: Function, data: any): any;
-    data(data: any): any;
+    data(method: Function): any;
     data(): any;
 
     contextData(method: Function, data: any): any;

@@ -4,6 +4,7 @@
  * */
 import invariant from 'invariant';
 import {getMethodName} from './method';
+import {isFunction} from './types';
 
 /*
 * 获取使用装饰的展示
@@ -11,7 +12,17 @@ import {getMethodName} from './method';
 export function getDecoratorUsedName(decoratorName, params) {
   params = Array.prototype.slice.apply(params);
   return ['@' + decoratorName + '(' + params.map(function (value) {
-      return "'" + value + "'";
+      let key = 'undefined';
+      if(isFunction(value) && value._eflowKey){
+        key = value._eflowKey.match(/\.([^\.]*)\./);
+        if(key){
+          key = key[1];
+        }
+      }
+      else{
+        key = value
+      }
+      return "'" + key + "'";
     }).join(',') + ')'];
   
 }
