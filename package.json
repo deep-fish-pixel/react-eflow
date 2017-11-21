@@ -1,6 +1,6 @@
 {
   "name": "react-eflow",
-  "version": "1.2.10",
+  "version": "1.2.11",
   "description": "eflow manage react data ",
   "main": "lib/eflow.js",
   "types": "lib/eflow.d.ts",
