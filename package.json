@@ -7,12 +7,13 @@
   "scripts": {
     "start": "webpack-dev-server --inline --content-base .",
     "build": "gulp",
-    "test": "cross-env NODE_ENV=production jest",
+    "test": "cross-env NODE_ENV=test jest",
     "test-debug": "node --inspect --harmony ./node_modules/jest/bin/jest.js"
   },
   "author": "maweimaweima",
   "license": "ISC",
   "dependencies": {
+    "clone": "^2.1.1",
     "invariant": "2.2.2",
     "shallowequal": "^1.0.2"
   },

@@ -31,7 +31,7 @@ gulp.task('copy', ['copy-eflow-ts'], function(){
 	setTimeout(function () {
 		gulp.src(['package.json', 'README.md', 'lib/**/*', 'src/**/*'], {base:"."})
 			.pipe(gulp.dest('../react-eflow-build'));
-	}, 100)
+	}, 1000)
 	
 });
 

@@ -135,9 +135,9 @@ class Store {
   }
 
   /*
-   * 恢复初始化状态
+   * 重置为初始化状态
    * */
-  restore(){
+  reset(){
     this.state = clone(this._cloneState || {});
   }
 

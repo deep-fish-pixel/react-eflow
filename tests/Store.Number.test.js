@@ -38,7 +38,12 @@ class TestStore extends Store{
   }
   testNumberToArrayToNumber(){
     let dispatch = this.testNumber.dispatch;
-    dispatch(1);
+    try{
+      dispatch(1);
+    }catch (e){
+      console.log(e);
+    }
+
   }
 }
 

@@ -36,7 +36,7 @@ var TodoList = /** @class */ (function (_super) {
     TodoList.prototype.render = function () {
         var filterTodos = this.props.filterTodos;
         var todoViews = filterTodos && filterTodos.map(function (todo) {
-            return (React.createElement(TodoItem_1.default, { todo: todo }));
+            return (React.createElement(TodoItem_1.default, { todo: todo, key: todo.id }));
         });
         return (React.createElement("ul", null, todoViews));
     };

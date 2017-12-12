@@ -24,7 +24,7 @@ class TodoList extends React.Component<Props, object> {
     let filterTodos = this.props.filterTodos;
     let todoViews = filterTodos && filterTodos.map(function (todo: {completed: boolean, id: number, text: string}) {
       return (
-        <TodoItem todo={todo}/>
+        <TodoItem todo={todo} key={todo.id}/>
       );
     });
     return (

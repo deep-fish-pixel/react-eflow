@@ -1,6 +1,6 @@
 import {Store} from '../../../src/eflow';
 
-class TodoStore extends Store{
+export class TodoStore extends Store{
   constructor(options){
     super(options);
     this.count = 0;

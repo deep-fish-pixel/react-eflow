@@ -12,11 +12,13 @@ describe('测试 TODO: TodoStore', () => {
 
   test(`创建2个任务`, () => {
     const todos = store.todos.data();
-    expect(todos.length)
-      .toBe(2);
-
+    expect(todos.length).toBe(2);
   });
 
-
+  test(`重置任务`, () => {
+    store.reset();
+    const todos = store.todos.data();
+    expect(todos.length).toBe(0);
+  });
 });
 
