@@ -3,6 +3,7 @@
  */
 import shallowEqual from 'shallowequal';
 import invariant from 'invariant';
+import clone from 'clone';
 import {forEachPrototype} from './prototype';
 import initProperties from './initProperties';
 import {isArray, isObject, isString, isNumber, isBoolean, isFunction} from './types';
@@ -129,6 +130,15 @@ class Store {
         state[name] = data[name];
       }
     }
+
+    this._cloneState = clone(state);
+  }
+
+  /*
+   * 恢复初始化状态
+   * */
+  restore(){
+    this.state = clone(this._cloneState || {});
   }
 
   /*
@@ -253,8 +263,12 @@ class Store {
    * */
   _data(invokerArguments, invokeName){
     let method = invokerArguments[0],
-      value = invokerArguments[1],
-      stateKey = method.stateKey;
+      value = invokerArguments[1];
+    if(!method){
+      process.env.NODE_ENV !== 'production'
+      && invariant(method, `${invokeName}方法的第一个参数值不能为空, 该值应该是方法类型`);
+    }
+    const stateKey = method.stateKey;
     process.env.NODE_ENV !== 'production'
     && invariant(isFunction(method), '调用%s.%s 方法, method参数类型不是方法, 请检查this.' + invokeName + '使用是否正确, 如上下文环境切换导致或首个参数类型需为方法', getMethodName(this.constructor), invokeName);
 

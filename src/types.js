@@ -14,8 +14,8 @@ export function isObject(obj) {
   return typeof obj === 'object'
     && obj != null
     && (
-      (window.Map ? !(obj instanceof window.Map) : true)
-      && (window.Set ?  !(obj instanceof window.Set) : true)
+      (typeof Map !== 'undefined' ? !(obj instanceof Map) : true)
+      && (typeof Set !== 'undefined' ?  !(obj instanceof Set) : true)
     );
 }
 
