@@ -25,12 +25,15 @@ const pubSub = {
           break;
         }
       }
+      /*node取消注册事件*/
+      if(typeof global !== 'object' || typeof global === 'object' && !global.process){
+        events.splice(insertIndex, 0, {
+          name: name,
+          callback: callback,
+          level
+        });
+      }
 
-      events.splice(insertIndex, 0, {
-        name: name,
-        callback: callback,
-        level
-      });
     }
     return this;
   },
