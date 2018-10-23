@@ -1,6 +1,6 @@
 ## Store
- 
-#### 1. 继承Store来处理具体业务 
+
+#### 1. 继承Store来处理具体业务
 
 ```
 class TodoStore extends Store
@@ -12,7 +12,7 @@ class TodoStore extends Store
 this.initState({
       todos: []
     });
-``` 
+```
 
 #### 3. 同一类型的Store可以多次实例化,内部根据类名称自动生成id,方便调试不同Store对象, 如需定制, 需提供id配置。
 
@@ -92,13 +92,13 @@ todos.some(function(todo, index){
 
 ```
 let someobj = this.some.data();//someobj类型为DefaultObject
-this.some.data('some'); 
+this.some.data('some');
 someobj = this.some.data();//someobj类型为字符串
-this.some.data(1); 
+this.some.data(1);
 someobj = this.some.data();//someobj类型为数字
-this.some.data(false); 
+this.some.data(false);
 someobj = this.some.data();//someobj类型为布尔
-this.some.data({}); 
+this.some.data({});
 someobj = this.some.data();//someobj类型为对象
 ```
 
@@ -183,3 +183,8 @@ static StateKeys = {
   }
 ```
 
+#### 17.通过Store清空当前状态, 使用reset
+
+```
+    store.reset();
+```
