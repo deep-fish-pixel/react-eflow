@@ -319,7 +319,7 @@ class Store {
     this.options = null;
     this.updateQueue = null;
     forEachPrototype(this, function (method, methodName) {
-      method.destory();
+      method.destory && method.destory();
     })
   }
 }

@@ -36,6 +36,7 @@ export class Store<P>{
 
     getState(): any;
     reset(): void;
+    destory(): void;
 }
 //dispatch装饰：有参数
 export function dispatch(methodName: string): Function
